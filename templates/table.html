@@ -9,10 +9,37 @@
 
 
 
-<div class="container-fluid py-4 text-center">
+<div class="container-fluid">
+    <div class="text-start card-smaller">
+        <button type="button" class="btn btn-outline-secondary" onclick="checkAll()">Select all</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="uncheckAll()">Clear</button>
+        <button type="button" class="btn btn-outline-danger" onclick="deletespecimen()">Delete</button>
+
+        <script type="text/javascript">
+            function checkAll(){
+                let cbs = document.querySelectorAll('.mycheckboxes');
+                for (const cb of cbs){
+                    cb.checked = true;
+                }
+            }
+    
+            function uncheckAll(){
+                let cbs = document.querySelectorAll('.mycheckboxes');
+                for (const cb of cbs){
+                    cb.checked = false;
+                }
+            }
+
+            function deletespecimen{
+                
+            }
+
+        </script>    
+    </div>
     <table class="table table-striped">
         <thead>
             <tr>
+                <th class="text-start">Select</th>
                 <th class="text-start">Number</th>
                 <th class="text-start">Title</th>
                 <th class="text-end">Date</th>
@@ -23,6 +50,12 @@
             <!-- Loop through the database entries to display them in this table -->
             {% for row in rows %}
             <tr>
+                <td>
+                    <div>
+                        <input type="checkbox" class="form-check-input mycheckboxes" name="checkboxes" value="{{ row['id'] }}">
+                    </div>
+                </td>
+
                 <td class="text-start">{{ row['my_id'] }}</td>
                 <td class="text-start">{{ row['title'] }}</td>
                 <td class="text-end">{{ row['date'] }}</td>
