@@ -13,7 +13,10 @@
     <div class="text-start card-smaller">
         <button type="button" class="btn btn-outline-secondary" onclick="checkAll()">Select all</button>
         <button type="button" class="btn btn-outline-secondary" onclick="uncheckAll()">Clear</button>
-        <button type="button" class="btn btn-outline-danger" onclick="deletespecimen()">Delete</button>
+        <!-- Delete Button triggers bootstrap dialogue (modal) -->
+        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal">
+        Delete
+        </button>
 
         <script type="text/javascript">
             function checkAll(){
@@ -30,12 +33,13 @@
                 }
             }
 
-            function deletespecimen{
-                
-            }
+            
 
-        </script>    
-    </div>
+        </script>  
+        
+       
+  
+</div>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -73,5 +77,26 @@
     </table>
 </div>
 
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete specimen</h5>
+          </div>
+        <div class="modal-body">
+          Are you sure you want to delete these specimen?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger">Delete</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- end modal -->
+  
 
 {% endblock %}

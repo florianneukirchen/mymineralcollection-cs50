@@ -174,3 +174,11 @@ def view():
     app.logger.info(row)
       
     return render_template("view.html", row=row)
+
+
+@app.route("/delete", methods=["POST"])
+def deletespecimen():
+    id = request.form.get("id")
+    if id:
+        db.execute("DELETE FROM specimen WHERE id = ? AND user_id = ?", id, session["user_id"])
+    return redirect("/table")
