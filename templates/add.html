@@ -45,7 +45,34 @@
                 addLists();
               });
 
-              
+              // remove button
+              const listUl = document.getElementById('ulminerals');
+              const lis = listUl.children;
+
+              function createBtn(li) {
+                  // create remove button
+                  const remove = document.createElement('button');
+                  remove.className = 'btn-icon remove';
+                  li.appendChild(remove);
+                  return li;
+              }
+
+              // loop to add buttons in each li
+              for (var i = 0; i < lis.length; i++) {
+                createBtn(lis[i]);
+              }
+
+              //Add button action
+              divList.addEventListener('click', (event) => {
+                if (event.target.tagName === 'BUTTON') {
+                  const button = event.target;
+                  const li = button.parentNode;
+                  const ul = li.parentNode;
+                  if (button.className === 'btn-icon remove') {
+                    ul.removeChild(li);
+                  } 
+                }
+              });
 
             </script>
 

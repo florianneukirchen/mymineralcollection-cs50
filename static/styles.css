@@ -6,3 +6,33 @@
     font-size: 70%;
 }
 
+.btn-icon {
+    background: none;
+    border: none;
+    display: inline-block;
+    vertical-align: top;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s linear, color 0.3s linear;
+  }
+  
+  .btn-icon:focus {
+    outline: none;
+  }
+  
+  .btn-icon:before {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+  }
+  
+  .btn-icon.remove:before {
+    content: '\f2ed';
+  }
+  
+  .btn-icon.down:before {
+    content: '\f063';
+  }
+  
+  .btn-icon.up:before {
+    content: '\f062';
+  }
