@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Specimen
+{% endblock %}
+
+{% block main %}
+    <form action="/add" method="post">
+        <div class="mb-4">
+            <input autofocus class="form-control mx-auto w-auto" id="number" name="number" placeholder="Number" type="text">
+        </div>
+        <div class="mb-4">
+            <input class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text">
+        </div>
+        <div class="mb-4">
+            <input class="form-control mx-auto w-auto" id="location" name="location" placeholder="Location" type="text">
+        </div>
+        <div class="mb-4">
+            <input class="form-control mx-auto w-auto" id="date" name="date" placeholder="Date" type="text">
+        </div>
+        
+        
+            <button class="btn btn-primary" type="submit">Add</button>
+    </form>
+{% endblock %}

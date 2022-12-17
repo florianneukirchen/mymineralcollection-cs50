@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Table 
+{% endblock %}
+
+{% block main %}
+
+
+
+
+<div class="container-fluid py-4 text-center">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="text-start">Number</th>
+                <th class="text-start">Title</th>
+                <th class="text-end">Date</th>
+                <th class="text-end">Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through the database entries to display them in this table -->
+            {% for row in rows %}
+            <tr>
+                <td class="text-start">{{ row['my_id'] }}</td>
+                <td class="text-start">{{ row['title'] }}</td>
+                <td class="text-end">{{ row['date'] }}</td>
+                <td class="text-end">{{ row['location']  }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+
+{% endblock %}
