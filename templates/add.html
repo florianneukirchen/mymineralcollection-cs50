@@ -12,7 +12,7 @@
         <div class="mb-4">
             <input class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text">
         </div>
-        <div class="mb-4">
+        <div class="mb-4" id="listholder">
             <!-- List minerals -->
             <ul id="ulminerals">
                   
@@ -52,7 +52,8 @@
               function createBtn(li) {
                   // create remove button
                   const remove = document.createElement('button');
-                  remove.className = 'btn-icon remove';
+                  remove.className = 'btn btn-secondary';
+                  remove.innerHTML = 'Remove';
                   li.appendChild(remove);
                   return li;
               }
@@ -63,6 +64,8 @@
               }
 
               //Add button action
+              const divList = document.getElementById('listholder');
+              
               divList.addEventListener('click', (event) => {
                 if (event.target.tagName === 'BUTTON') {
                   const button = event.target;
