@@ -27,6 +27,12 @@
                 <td class="text-start">{{ row['title'] }}</td>
                 <td class="text-end">{{ row['date'] }}</td>
                 <td class="text-end">{{ row['location']  }}</td>
+                <td>
+                    <form action="/view">
+                        <input name="id" type="hidden" value="{{ row['id'] }}">
+                        <input type="submit" value="View">
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

@@ -1,4 +1,5 @@
 import os
+import logging
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -7,7 +8,7 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-from helpers import apology, login_required, lookup, usd
+from helpers import apology, login_required
 
 # Configure application
 app = Flask(__name__)
@@ -45,7 +46,7 @@ def index():
 
 @app.route("/browse")
 @login_required
-def table():
+def browse():
     """Show table of collection"""
     return redirect("/")
 
@@ -157,4 +158,19 @@ def register():
         return render_template("register.html")
 
 
+@app.route("/view")
+@login_required
+def view():
+    """View record"""
+    id = request.args.get("id")
+   
+    if not id:
+        return apology("File does not exist", 404)
+    rows = db.execute("SELECT * FROM specimen WHERE user_id = ? AND id = ?", session["user_id"], id)
 
+    if len(rows) != 1:
+        return apology("Invalid specimen ID")
+    row = rows[0]
+    app.logger.info(row)
+      
+    return render_template("view.html", row=row)
