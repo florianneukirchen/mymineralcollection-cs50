@@ -2,7 +2,7 @@ import os
 import logging
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -119,6 +119,8 @@ def add():
         number = request.form.get("number")
         location = request.form.get("location")
         date = request.form.get("date")
+
+        # TODO CHECK
         db.execute("INSERT INTO specimen (user_id, my_id, title, location, date, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
                        session["user_id"], number, title, location, date, datetime.now())
 
@@ -171,8 +173,7 @@ def view():
     if len(rows) != 1:
         return apology("Invalid specimen ID")
     row = rows[0]
-    app.logger.info(row)
-      
+          
     return render_template("view.html", row=row)
 
 
@@ -182,3 +183,19 @@ def deletespecimen():
     if id:
         db.execute("DELETE FROM specimen WHERE id = ? AND user_id = ?", id, session["user_id"])
     return redirect("/table")
+
+
+# Experimental
+@app.route("/mineralsearch")
+def mineralsearch():
+    q = request.args.get("q")
+    if q:
+        app.logger.info(q)
+        rows = db.execute("SELECT name FROM minerals WHERE name LIKE ? LIMIT 50", q + "%")
+    else:
+        rows = []
+    return jsonify(rows)
+
+@app.route("/try")
+def search():
+    return render_template("try.html")

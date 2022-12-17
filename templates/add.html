@@ -13,10 +13,50 @@
             <input class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text">
         </div>
         <div class="mb-4">
+            <!-- List minerals -->
+            <ul id="ulminerals">
+                  
+            </ul>
+            <div>
+                <input type="text" id="addInput">
+                <button type="button" id="addBtn" class="btn btn-primary">Add Item</button>
+            </div>  
+            <script type="text/javascript">
+             
+              // create variables
+              const addInput = document.querySelector('#addInput');
+              const addBtn = document.querySelector('#addBtn');
+
+              function addLists() {
+                if (addInput.value === '') {
+                  alert('Enter the list name please!!!');
+                } else {
+                  const ul = document.getElementById('ulminerals');
+                  const li = document.createElement('li');
+                  li.innerHTML = addInput.value;
+                  addInput.value = '';
+                  ul.appendChild(li);
+                  createBtn(li);
+                }
+              }
+
+              // add list when clicked on add item button
+              addBtn.addEventListener('click', () => {
+                addLists();
+              });
+
+              
+
+            </script>
+
+        </div>    
+        <div class="mb-4">
             <input class="form-control mx-auto w-auto" id="location" name="location" placeholder="Location" type="text">
         </div>
         <div class="mb-4">
-            <input class="form-control mx-auto w-auto" id="date" name="date" placeholder="Date" type="text">
+            <label for="date">Date:</label>
+            <input class="form-control mx-auto w-auto" id="date" name="date" placeholder="Date" type="date">
+            
         </div>
         
         
