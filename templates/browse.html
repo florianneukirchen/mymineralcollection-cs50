@@ -6,34 +6,43 @@
 
 {% block main %}
 
-<div class="container-fluid py-4 text-center">
+<div class="container-fluid text-center">
   {% if heading %}
   <h1>{{ heading }}</h1>
   {% endif %}
 
-    <div class="card-group">
-        {% for row in rows %}
-        <div class="card md-7" >
-            <div class="row g-0">
-              <div class="col-md-3">
-                <img src="static/100.png" class="img-fluid rounded" alt="...">
-              </div>
-              <div class="col-md-4">
-                <div class="card-body text-start card-smaller">
-                    <h5 class="card-title">{{ row['title'] }}</h5>
-                    <p class="card-text">{{ row['my_id'] }}</p>
-                    <p class="card-text">Minerals</p>
-                    <p class="card-text">Minerals</p>
-                    <p class="card-text">Minerals</p>
-                    <p class="card-text">{{ row['location'] }}</p>
-                    <p class="card-text">{{ row['date'] }}</p>
+
+    <div class="container-fluid">
+        <div class="row row-cols-1  row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
+
+        {% for row in rows %}    
+        <div class="col">
+            <div class="card">
+                <div class="card-body text-start size90">
+                  <h5 class="card-title">{{ row['title'] }}</h5>
+                  <div class="card-text">{{ row['my_id'] }}</div>
+                  <div class="card-text">Min</div>
+                  <div class="card-text">Min</div>
+                  <div class="card-text">{{ row['location'] }}</div>
+                  {% if row['day'] or row['month'] or row['year'] %}
+                  <div class="card-text text-muted">{{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</div>
+                  {% endif %}
+
+                  <a href="#" class="btn btn-outline-primary btn-sm mt-1">View</a>
                 </div>
               </div>
-            </div>
-          </div>
+        </div>
         {% endfor %}
-    </div>
+
+     
+  
 </div>
-
-
 {% endblock %}
+
+<!--
+
+  <div class="col-md-3">
+                <img src="static/100.png" class="img-fluid rounded" alt="...">
+              </div>
+
+-->
