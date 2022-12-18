@@ -1,53 +1,36 @@
-// create variables
-const addInput = document.querySelector('#addInput');
-const addBtn = document.querySelector('#addBtn');
-
-function addLists() {
-  if (addInput.value === '') {
-    alert('Enter the list name please!!!');
-  } else {
-    const ul = document.getElementById('ulminerals');
-    const li = document.createElement('li');
-    li.innerHTML = addInput.value;
-    addInput.value = '';
-    ul.appendChild(li);
-    createBtn(li);
-  }
-}
-
-// add list when clicked on add item button
-addBtn.addEventListener('click', () => {
-  addLists();
+// Magic search
+let input = document.getElementById('mininput');
+input.addEventListener('input', async function() {
+    let response = await fetch('/mineralsearch?q=' + input.value);
+    let searchresult = await response.json();
+    let html = '';
+    for (let id in searchresult) {
+        let title = searchresult[id].name;
+        html += '<button type=\"button\" onclick=\"addtolist(id)\" class=\"addBtn list-group-item list-group-item-action\" id=\"' + title + '\">' + title + '</button>';
+    }
+    
+    console.log(html);
+    document.getElementById("present").innerHTML = html;
 });
 
-// remove button
-const listUl = document.getElementById('ulminerals');
-const lis = listUl.children;
+// Add to list
 
-function createBtn(li) {
-    // create remove button
-    const remove = document.createElement('button');
-    remove.className = 'btn btn-secondary';
-    remove.innerHTML = 'Remove';
-    li.appendChild(remove);
-    return li;
+var addBtns = document.querySelectorAll('.addBtn');
+
+// function triggered by click event
+
+function addtolist(value) {
+  const ul = document.getElementById('ulminerals');
+  const li = document.createElement('li');
+  li.innerHTML = value;
+  addInput.value = '';
+  ul.appendChild(li);
+  // Create delete button
+  createBtn(li);
+  
 }
 
-// loop to add buttons in each li
-for (var i = 0; i < lis.length; i++) {
-  createBtn(lis[i]);
-}
 
-//Add button action
-const divList = document.getElementById('listholder');
 
-divList.addEventListener('click', (event) => {
-  if (event.target.tagName === 'BUTTON') {
-    const button = event.target;
-    const li = button.parentNode;
-    const ul = li.parentNode;
-    if (button.className === 'btn btn-secondary') {
-      ul.removeChild(li);
-    } 
-  }
-});
+
+ 

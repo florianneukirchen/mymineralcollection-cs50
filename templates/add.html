@@ -42,17 +42,26 @@
     <div class="container-md">
       <div class="mb-4" id="listholder">
         <!-- List minerals -->
-        <ul id="ulminerals">
-              
+        <ul id="ulminerals" class="list-group">
         </ul>
-        <div>
-            <input type="text" id="addInput" class="form-control mx-auto w-auto">
-            <button type="button" id="addBtn" class="btn btn-primary">Add Item</button>
-        </div>  
-        <script src="static/add.js"></script> 
-        
       </div>
+
+      <!-- Magic search -->
+      <div>
+            <input type="text" id="mininput" class="form-control mx-auto w-auto" autocomplete="off" placeholder="Add minerals">
+            <!-- List matching minerals-->
+            <div id="present" class="list-group mb-4"></div>
+            
+      </div>  
+      
+      <script src="static/add.js"></script> 
+        
+      
     </div>    
   </div>
 </div>
 {% endblock %}
+
+<!--
+<button type="button" id="addBtn" class="btn btn-primary">Add Item</button>
+-->
