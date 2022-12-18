@@ -43,3 +43,9 @@ def taglink(value):
         return ""
     html = '<a href="tag?t=' + value + '">' + value + '</a>' 
     return html
+
+def addnr(value):
+    """Add Nr."""
+    if not value:
+        return ""
+    return 'Nr. ' + value

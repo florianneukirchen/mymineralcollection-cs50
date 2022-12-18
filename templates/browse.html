@@ -20,15 +20,25 @@
             <div class="card">
                 <div class="card-body text-start size90">
                   <h5 class="card-title">{{ row['title'] }}</h5>
-                  <div class="card-text">{{ row['my_id'] }}</div>
-                  <div class="card-text">Min</div>
-                  <div class="card-text">Min</div>
-                  <div class="card-text">{{ row['location'] }}</div>
+                  <div class="card-text mb-2">{{ row['my_id'] | addnr }}</div>
+                  
+                  {% for min in row['minerals'] %}
+                  <div class="card-text">{{ min['name'] }}</div>
+                  {% endfor %}
+
+                  <div class="card-text">{{ row['locality'] }}</div>
                   {% if row['day'] or row['month'] or row['year'] %}
                   <div class="card-text text-muted">{{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</div>
                   {% endif %}
 
-                  <a href="#" class="btn btn-outline-primary btn-sm mt-1">View</a>
+                  {% for tag in row['tags'] %}
+                    {{ tag['tag'] | taglink | safe }},
+                  {% endfor %}
+
+                  <form action="/view" class="mt-1">
+                    <input name="id" type="hidden" value="{{ row['id'] }}">
+                    <input type="submit" value="View">
+                  </form>
                 </div>
               </div>
         </div>

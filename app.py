@@ -9,7 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 import re
 
-from helpers import apology, login_required, date2, date4, taglink
+from helpers import apology, login_required, date2, date4, taglink, addnr
 
 # Configure application
 app = Flask(__name__)
@@ -21,6 +21,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.jinja_env.filters["date2"] = date2
 app.jinja_env.filters["date4"] = date4
 app.jinja_env.filters["taglink"] = taglink
+app.jinja_env.filters["addnr"] = addnr
 
 
 # Configure session to use filesystem (instead of signed cookies)
@@ -46,8 +47,11 @@ def after_request(response):
 def index():
     """Browse Collection"""
     rows = db.execute("SELECT * FROM specimen WHERE user_id = ?", session["user_id"])
-    
-  
+
+    for row in rows:
+        row['minerals'] = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", row['id'])
+        row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+   
     return render_template("browse.html", rows=rows)
 
 @app.route("/browse")
