@@ -46,7 +46,7 @@ def index():
     rows = db.execute("SELECT * FROM specimen WHERE user_id = ?", session["user_id"])
     
   
-    return render_template("cards.html", rows=rows)
+    return render_template("browse.html", rows=rows)
 
 @app.route("/browse")
 @login_required

@@ -27,14 +27,18 @@ with open("minerals.csv", "r") as file:
 # User table
 sql = "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, hash TEXT NOT NULL)"
 db.execute(sql)
-db.execute("CREATE UNIQUE INDEX username ON users (username)")
+db.execute("CREATE UNIQUE INDEX usernameidx ON users (username)")
 
 # Specimen table
 sql = "CREATE TABLE specimen (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, my_id TEXT, title TEXT, locality TEXT, day INTEGER, month INTEGER, year INTEGER, storage TEXT, timestamp TEXT, thumbnail TEXT)"
 db.execute(sql)
+db.execute("CREATE UNIQUE INDEX yearidx ON specimen (year)")
 
 # specmin table
-# Alt sql = "CREATE TABLE specmin (specimen_id INTEGER NOT NULL, min_symbol TEXT NOT NULL, FOREIGN KEY(specimen_id) REFERENCES specimen(id), FOREIGN KEY(min_symbol) REFERENCES minerals(symbol))"
 sql = "CREATE TABLE specmin (specimen_id INTEGER NOT NULL REFERENCES specimen(id) ON DELETE CASCADE, min_symbol TEXT NOT NULL, FOREIGN KEY(min_symbol) REFERENCES minerals(symbol))"
-
 db.execute(sql)
+
+# tags table
+sql = "CREATE TABLE tags (specimen_id INTEGER NOT NULL REFERENCES specimen(id) ON DELETE CASCADE, tag TEXT NOT NULL)"
+db.execute(sql)
+db.execute("CREATE UNIQUE INDEX tagidx ON tags (tag)")
