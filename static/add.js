@@ -33,7 +33,7 @@ function addtolist(value) {
   const ul = document.getElementById('ulminerals');
   const li = document.createElement('li');
   let html = value + ''   
-  li.innerHTML = value + '<button type=\"button\" onclick=\"removefromlist(id)\" class=\"btn btn-outline-secondary\" id=\"rem' + title + '\">Remove</button>';
+  li.innerHTML = value + '<button type=\"button\" onclick=\"removefromlist(id)\" class=\"btn btn-outline-secondary btn-sm float-end\" id=\"rem' + title + '\">Remove</button>';
   li.className = "list-group-item";
   ul.appendChild(li);
   // Clear input 
