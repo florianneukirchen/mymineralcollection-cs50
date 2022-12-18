@@ -24,22 +24,39 @@ var addBtns = document.querySelectorAll('.addBtn');
 
 function addtolist(value) {
   // remove "add" from the beginning of the string
-  value = value.slice(3)
+  value = value.slice(3);
   //update invisable input field
-  mineralsarray.push(value)
-  hidden.value = mineralsarray.join()
+  mineralsarray.push(value);
+  hidden.value = mineralsarray.join();
 
   //add mineral to visable list
   const ul = document.getElementById('ulminerals');
   const li = document.createElement('li');
-  li.innerHTML = value;
+  let html = value + ''   
+  li.innerHTML = value + '<button type=\"button\" onclick=\"removefromlist(id)\" class=\"btn btn-outline-secondary\" id=\"rem' + title + '\">Remove</button>';
   li.className = "list-group-item";
   ul.appendChild(li);
   // Clear input 
   input.value = '';
-  
+  document.getElementById("present").innerHTML = "";
 }
 
+function removefromlist(value) {
+  const btn = document.getElementById(value);
+  // remove "rem" from the beginning of the string
+  // value = value.slice(3);
+
+  const li = btn.parentNode;
+  const ul = li.parentNode;
+  li.removeChild(btn);
+  let s = li.innerHTML;
+  ul.removeChild(li);
+
+  // Update invisable input field
+  mineralsarray = mineralsarray.filter(e => e != s);
+  hidden.value = mineralsarray.join();
+
+}
 
 
 
