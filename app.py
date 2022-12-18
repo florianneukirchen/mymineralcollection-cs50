@@ -8,13 +8,17 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-from helpers import apology, login_required
+from helpers import apology, login_required, date2, date4
 
 # Configure application
 app = Flask(__name__)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+# Custom filter
+app.jinja_env.filters["date2"] = date2
+app.jinja_env.filters["date4"] = date4
 
 
 # Configure session to use filesystem (instead of signed cookies)
@@ -117,12 +121,38 @@ def add():
     if request.method == "POST":
         title = request.form.get("title")
         number = request.form.get("number")
-        location = request.form.get("location")
-        date = request.form.get("date")
+        locality = request.form.get("locality")
+        storage = request.form.get("storage")
+        day = request.form.get("day")
+        month = request.form.get("month")
+        year = request.form.get("year")
+        tags = request.form.get("tags")
+        minerals = request.form.get("minerals")
 
-        # TODO CHECK
-        db.execute("INSERT INTO specimen (user_id, my_id, title, location, date, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
-                       session["user_id"], number, title, location, date, datetime.now())
+        thumbnail = None
+
+        # CHECK
+        if not title:
+            return apology("Title is required")
+        if day in [str(i) for i in range(1, 32)]:
+            day = int(day)
+        else:
+            day = None
+        if month in [str(i) for i in range(1, 13)]:
+            month = int(month)
+        else:
+            month = None
+        if len(year) == 4 and year.isdigit():
+            year = int(year)
+        else:
+            year = None
+
+        
+
+
+
+        db.execute("INSERT INTO specimen (user_id, my_id, title, locality, day, month, year, storage, timestamp, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                       session["user_id"], number, title, locality, day, month, year, storage, datetime.now(), thumbnail)
 
 
 

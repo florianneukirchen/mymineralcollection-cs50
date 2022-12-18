@@ -46,8 +46,12 @@
                 <th class="text-start">Select</th>
                 <th class="text-start">Number</th>
                 <th class="text-start">Title</th>
+                <th class="text-start">Minerals</th>
+                <th class="text-start">Locality</th>
                 <th class="text-end">Date</th>
-                <th class="text-end">Location</th>
+                <th class="text-start">Tags</th>
+                <th class="text-start">Storage</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -62,8 +66,12 @@
 
                 <td class="text-start">{{ row['my_id'] }}</td>
                 <td class="text-start">{{ row['title'] }}</td>
-                <td class="text-end">{{ row['date'] }}</td>
-                <td class="text-end">{{ row['location']  }}</td>
+                <td class="text-start">Minerals ...</td>
+                <td class="text-start">{{ row['locality']  }}</td>
+                <td class="text-end">{{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</td>
+                <td class="text-start">Tags...</td>
+                <td class="text-start">{{ row['storage'] }}</td>
+                
                 <td>
                     <form action="/view">
                         <input name="id" type="hidden" value="{{ row['id'] }}">

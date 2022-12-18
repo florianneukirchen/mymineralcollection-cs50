@@ -5,91 +5,54 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/add" method="post">
-        <div class="mb-4">
-            <input autofocus class="form-control mx-auto w-auto" id="number" name="number" placeholder="Number" type="text">
-        </div>
-        <div class="mb-4">
-            <input class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text">
-        </div>
-        <div class="mb-4" id="listholder">
-            <!-- List minerals -->
-            <ul id="ulminerals">
-                  
-            </ul>
-            <div>
-                <input type="text" id="addInput" class="form-control mx-auto w-auto">
-                <button type="button" id="addBtn" class="btn btn-primary">Add Item</button>
-            </div>  
-            <script type="text/javascript">
-             
-              // create variables
-              const addInput = document.querySelector('#addInput');
-              const addBtn = document.querySelector('#addBtn');
+<div class="row">
+  <div class="col">
 
-              function addLists() {
-                if (addInput.value === '') {
-                  alert('Enter the list name please!!!');
-                } else {
-                  const ul = document.getElementById('ulminerals');
-                  const li = document.createElement('li');
-                  li.innerHTML = addInput.value;
-                  addInput.value = '';
-                  ul.appendChild(li);
-                  createBtn(li);
-                }
-              }
-
-              // add list when clicked on add item button
-              addBtn.addEventListener('click', () => {
-                addLists();
-              });
-
-              // remove button
-              const listUl = document.getElementById('ulminerals');
-              const lis = listUl.children;
-
-              function createBtn(li) {
-                  // create remove button
-                  const remove = document.createElement('button');
-                  remove.className = 'btn btn-secondary';
-                  remove.innerHTML = 'Remove';
-                  li.appendChild(remove);
-                  return li;
-              }
-
-              // loop to add buttons in each li
-              for (var i = 0; i < lis.length; i++) {
-                createBtn(lis[i]);
-              }
-
-              //Add button action
-              const divList = document.getElementById('listholder');
-              
-              divList.addEventListener('click', (event) => {
-                if (event.target.tagName === 'BUTTON') {
-                  const button = event.target;
-                  const li = button.parentNode;
-                  const ul = li.parentNode;
-                  if (button.className === 'btn btn-secondary') {
-                    ul.removeChild(li);
-                  } 
-                }
-              });
-
-            </script>
-
-        </div>    
-        <div class="mb-4">
-            <input class="form-control mx-auto w-auto" id="location" name="location" placeholder="Location" type="text">
-        </div>
-        <div class="mb-4">
-            <label for="date">Date:</label>
-            <input class="form-control mx-auto w-auto" id="date" name="date" placeholder="Date" type="date">
+    <div class="container-lg">
+      <div class="form-group text-end">
+        <form action="/add" method="post">
             
-        </div>
+            <input autofocus class="form-control mb-2" id="number" name="number" placeholder="Number" type="text">
+            <input class="form-control mb-2" id="title" name="title" placeholder="Title" type="text">
+            <input class="form-control mb-2" id="locality" name="locality" placeholder="Locality" type="text">
+            <div class="row mb-2">
+              <div class="col text-start">Date:</div>
+              <div class="col">
+                <input class="form-control" id="day" name="day" placeholder="Day" type="text">
+              </div>
+              <div class="col">
+              <input class="form-control" id="month" name="month" placeholder="Month" type="text">
+              </div>
+              <div class="col">
+              <input class="form-control" id="year" name="year" placeholder="Year" type="text">
+              </div>
+              
+            </div>
+            <input class="form-control mb-2" id="tags" name="tags" placeholder="Tags (comma separated)" type="text">
+            <input class="form-control mb-2" id="storage" name="storage" placeholder="Storage" type="text">
+            <input type="hidden" id="minerals" name="minerals" value="">
+           
+            <button class="btn btn-primary mt-5" type="submit">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">  
+    <div class="container-md">
+      <div class="mb-4" id="listholder">
+        <!-- List minerals -->
+        <ul id="ulminerals">
+              
+        </ul>
+        <div>
+            <input type="text" id="addInput" class="form-control mx-auto w-auto">
+            <button type="button" id="addBtn" class="btn btn-primary">Add Item</button>
+        </div>  
+        <script src="static/add.js"></script> 
         
-        
-            <button class="btn btn-primary" type="submit">Add</button>
-    </form>
+      </div>
+    </div>    
+  </div>
+</div>
 {% endblock %}

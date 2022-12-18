@@ -8,17 +8,7 @@ from functools import wraps
 
 def apology(message, code=400):
     """Render message as an apology to user."""
-    def escape(s):
-        """
-        Escape special characters.
-
-        https://github.com/jacebrowning/memegen#special-characters
-        """
-        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
-                         ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
-            s = s.replace(old, new)
-        return s
-    return render_template("apology.html", code=code, message=escape(message)), code
+    return render_template("apology.html", code=code, message=message), code
 
 
 def login_required(f):
@@ -35,3 +25,14 @@ def login_required(f):
     return decorated_function
 
 
+def date2(value):
+    """Format value as 2 digits."""
+    if not value:
+        return "__"
+    return f"{value:02d}"
+
+def date4(value):
+    """Format value as 2 digits."""
+    if not value:
+        return "____"
+    return f"{value:04d}"

@@ -11,7 +11,7 @@ db.execute(sql)
 
 # Open csv
 
-with open("static/minerals.csv", "r") as file:
+with open("minerals.csv", "r") as file:
     # Dict reader
     reader = csv.DictReader(file)
 
@@ -30,7 +30,7 @@ db.execute(sql)
 db.execute("CREATE UNIQUE INDEX username ON users (username)")
 
 # Specimen table
-sql = "CREATE TABLE specimen (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, my_id TEXT, title, TEXT, date TEXT, location TEXT, timestamp TEXT, thumbnail TEXT)"
+sql = "CREATE TABLE specimen (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, my_id TEXT, title TEXT, locality TEXT, day INTEGER, month INTEGER, year INTEGER, storage TEXT, timestamp TEXT, thumbnail TEXT)"
 db.execute(sql)
 
 # specmin table
