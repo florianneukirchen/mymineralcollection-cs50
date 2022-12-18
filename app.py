@@ -1,5 +1,5 @@
 import os
-import logging
+import logging # usage: app.logger.info(x)
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
@@ -215,7 +215,13 @@ def view():
 def deletespecimen():
     id = request.form.get("id")
     if id:
-        db.execute("DELETE FROM specimen WHERE id = ? AND user_id = ?", id, session["user_id"])
+        rows = db.execute("DELETE FROM specimen WHERE id = ? AND user_id = ?", id, session["user_id"])
+
+        if rows < 1:
+            flash('Error, could not delete specimen from database.')
+        else:
+            flash('Specimen has been deleted from database.')
+            
     return redirect("/table")
 
 
@@ -226,10 +232,10 @@ def mineralsearch():
     if q:
         rows = db.execute("SELECT name FROM minerals WHERE name LIKE ? ORDER BY name LIMIT 20",  "%" + q + "%")
     else:
-        app.logger.info("nothing")
         rows = []
     return jsonify(rows)
 
 @app.route("/try")
 def search():
     return render_template("try.html")
+
