@@ -23,10 +23,11 @@ function addtolist(value) {
   const ul = document.getElementById('ulminerals');
   const li = document.createElement('li');
   li.innerHTML = value;
-  addInput.value = '';
   ul.appendChild(li);
   // Create delete button
   createBtn(li);
+  // Clear input
+  input.value = '';
   
 }
 
