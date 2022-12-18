@@ -46,6 +46,12 @@ def after_request(response):
 @login_required
 def index():
     """Browse Collection"""
+    # Are we searching?
+
+    q = request.args.get("search")
+    if q:
+        # TODO
+
     rows = db.execute("SELECT * FROM specimen WHERE user_id = ?", session["user_id"])
 
     for row in rows:
