@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Table 
+{% endblock %}
+
+{% block main %}
+
+<div class="container-lg text-start">
+
+    <h2>{{ row['title'] }}</h2>
+    <div>Number: {{ row['my_id'] }}</div>
+    <div>Minerals</div>
+    <div>Minerals</div>
+    <div>Minerals</div>
+    <div>{{ row['locality'] }}</div>
+    <div>{{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</div>
+    <div>Tags...</div>
+    <div>{{ row['storage'] }}</div>
+
+    <form action="/delete" method="post">
+        <input name="id" type="hidden" value="{{ row.id }}">
+        <input class="btn btn-outline-danger" type="submit" value="Delete">
+    </form>
+               
+</div>
+
+
+{% endblock %}
