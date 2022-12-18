@@ -8,7 +8,7 @@ input.addEventListener('input', async function() {
     let html = '';
     for (let id in searchresult) {
         let title = searchresult[id].name;
-        html += '<button type=\"button\" onclick=\"addtolist(id)\" class=\"addBtn list-group-item list-group-item-action\" id=\"' + title + '\">' + title + '</button>';
+        html += '<button type=\"button\" onclick=\"addtolist(id)\" class=\"addBtn list-group-item list-group-item-action\" id=\"add' + title + '\">' + title + '</button>';
     }
     
     console.log(html);
@@ -23,6 +23,8 @@ var addBtns = document.querySelectorAll('.addBtn');
 // function triggered by click event
 
 function addtolist(value) {
+  // remove "add" from the beginning of the string
+  value = value.slice(3)
   //update invisable input field
   mineralsarray.push(value)
   hidden.value = mineralsarray.join()
@@ -33,9 +35,7 @@ function addtolist(value) {
   li.innerHTML = value;
   li.className = "list-group-item";
   ul.appendChild(li);
-  // Create delete button
-  createBtn(li);
-  // Clear input (TODO does not work, why?)
+  // Clear input 
   input.value = '';
   
 }
