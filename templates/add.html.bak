@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Specimen
+{% endblock %}
+
+{% block main %}
+<h1>Add Specimen</h1>
+<div class="row">
+  <div class="col">  
+    <div class="container-md">
+      <div class="mb-4" id="listholder">
+        <!-- List minerals -->
+        <ul id="ulminerals" class="list-group">
+        </ul>
+      </div>
+
+      <h4>Add minerals</h4>
+
+      <!-- Magic search -->
+      <div>
+            <input type="text" id="mininput" name="minerals" class="form-control mb-4" autocomplete="off" placeholder="Search">
+            <!-- List matching minerals-->
+            <div id="present" class="list-group mb-4"></div>
+            
+      </div>  
+      
+      <script src="static/add.js"></script> 
+        
+      
+    </div>    
+  </div>
+
+  <div class="col">
+
+    <div class="container-lg">
+      <div class="form-group text-start">
+        <form action="/add" method="post">
+            
+            <input autofocus class="form-control mb-2" id="number" name="number" placeholder="Number" type="text">
+            <input class="form-control mb-2" id="title" name="title" placeholder="Title" type="text" required>
+            <input class="form-control mb-2" id="locality" name="locality" placeholder="Locality" type="text">
+            <div class="row mb-2">
+              <div class="col text-start">Date:</div>
+              <div class="col">
+                <input class="form-control" id="day" name="day" placeholder="Day" type="text">
+              </div>
+              <div class="col">
+              <input class="form-control" id="month" name="month" placeholder="Month" type="text">
+              </div>
+              <div class="col">
+              <input class="form-control" id="year" name="year" placeholder="Year" type="text">
+              </div>
+              
+            </div>
+            <input class="form-control mb-2" id="tags" name="tags" placeholder="Tags (comma separated)" type="text">
+            <input class="form-control mb-2" id="storage" name="storage" placeholder="Storage" type="text">
+            <input type="hidden" id="hiddenminerals" name="minerals" value="">
+            
+            <button class="btn btn-primary mt-5" type="submit">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+{% endblock %}
+
+<!--
+<button type="button" id="addBtn" class="btn btn-primary">Add Item</button>
+-->
