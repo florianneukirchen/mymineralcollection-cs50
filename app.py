@@ -190,9 +190,9 @@ def deletespecimen():
 def mineralsearch():
     q = request.args.get("q")
     if q:
-        app.logger.info(q)
-        rows = db.execute("SELECT name FROM minerals WHERE name LIKE ? LIMIT 50", q + "%")
+        rows = db.execute("SELECT name FROM minerals WHERE name LIKE ? ORDER BY name LIMIT 20",  "%" + q + "%")
     else:
+        app.logger.info("nothing")
         rows = []
     return jsonify(rows)
 

@@ -18,7 +18,7 @@
                   
             </ul>
             <div>
-                <input type="text" id="addInput">
+                <input type="text" id="addInput" class="form-control mx-auto w-auto">
                 <button type="button" id="addBtn" class="btn btn-primary">Add Item</button>
             </div>  
             <script type="text/javascript">
@@ -71,7 +71,7 @@
                   const button = event.target;
                   const li = button.parentNode;
                   const ul = li.parentNode;
-                  if (button.className === 'btn-icon remove') {
+                  if (button.className === 'btn btn-secondary') {
                     ul.removeChild(li);
                   } 
                 }
