@@ -128,7 +128,7 @@ def add():
         year = request.form.get("year")
         tags = request.form.get("tags")
         minerals = request.form.get("minerals")
-
+     
         thumbnail = None
 
         # CHECK
@@ -147,10 +147,7 @@ def add():
         else:
             year = None
 
-        
-
-
-
+        # Add Specimen to DB
         newid = db.execute("INSERT INTO specimen (user_id, my_id, title, locality, day, month, year, storage, timestamp, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                        session["user_id"], number, title, locality, day, month, year, storage, datetime.now(), thumbnail)
 
@@ -158,7 +155,14 @@ def add():
             flash('New specimen has been added.')
         else:
             flash('Error, not able to add specimen.')
-
+        
+        # Add minerals to DB
+        if minerals:
+            minerals = minerals.split(',')
+            for min in minerals:
+                symbol = db.execute("SELECT symbol FROM minerals WHERE name = ?", min)[0]['symbol']
+                db.execute("INSERT INTO specmin (specimen_id, min_symbol) VALUES (?,?)", newid, symbol)
+ 
         return redirect("/table")
     else:
         # GET
@@ -235,7 +239,4 @@ def mineralsearch():
         rows = []
     return jsonify(rows)
 
-@app.route("/try")
-def search():
-    return render_template("try.html")
 
