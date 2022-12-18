@@ -75,7 +75,7 @@
                 <td class="text-end">{{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</td>
                 <td class="text-start">
                     {% for tag in row['tags'] %}
-                    {{ tag['tag'] }},
+                    {{ tag['tag'] | taglink | safe }},
                     {% endfor %}
                 </td>
                 <td class="text-start">{{ row['storage'] }}</td>

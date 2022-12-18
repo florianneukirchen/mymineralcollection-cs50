@@ -7,8 +7,9 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
+import re
 
-from helpers import apology, login_required, date2, date4
+from helpers import apology, login_required, date2, date4, taglink
 
 # Configure application
 app = Flask(__name__)
@@ -19,6 +20,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 # Custom filter
 app.jinja_env.filters["date2"] = date2
 app.jinja_env.filters["date4"] = date4
+app.jinja_env.filters["taglink"] = taglink
 
 
 # Configure session to use filesystem (instead of signed cookies)
@@ -171,7 +173,8 @@ def add():
         if tags:
             tags = tags.split(',')
             for tag in tags:
-                tag = tag.strip().replace('&', '').replace('<', '').replace('>', '')
+                # Remove dangerous characters
+                tag = re.sub('[^a-zA-Z0-9]', '', tag)
                 db.execute ("INSERT INTO tags (specimen_id, tag) VALUES (?,?)", newid, tag)
             
         return redirect("/table")
@@ -247,22 +250,19 @@ def tag():
     t = request.args.get("t")
    
     if not t:
+        # Show all tags
         rows = db.execute("SELECT DISTINCT tags.tag AS tags FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.user_id = ?", session["user_id"])
         return render_template("tagsall.html", rows=rows)
 
-      
+    rows = db.execute("SELECT * FROM specimen JOIN tags ON tags.specimen_id = specimen.id WHERE specimen.user_id = ? AND tags.tag = ?", session["user_id"], t)      
     
+    if len(rows) == 0:
+        # Tag did not exist for user, show all tags
+        rows = db.execute("SELECT DISTINCT tags.tag AS tags FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.user_id = ?", session["user_id"])
+        return render_template("tagsall.html", rows=rows)
 
-    if len(rows) != 1:
-        return apology("Invalid specimen ID")
-    row = rows[0]
-    row['minerals'] = db.execute("SELECT minerals.name AS name, minerals.chemistry AS chemistry, minerals.crystal_system AS crystal_system FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", id)
+    return render_template("browse.html", rows=rows, heading='Tag: '+ t)
     
-
-    return render_template("view.html", row=row)
-    
-
-
 
 # JSON API
 @app.route("/mineralsearch")

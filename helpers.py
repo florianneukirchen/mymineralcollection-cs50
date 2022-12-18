@@ -36,3 +36,10 @@ def date4(value):
     if not value:
         return "____"
     return f"{value:04d}"
+
+def taglink(value):
+    """Add links to tags."""
+    if not value:
+        return ""
+    html = '<a href="tag?t=' + value + '">' + value + '</a>' 
+    return html

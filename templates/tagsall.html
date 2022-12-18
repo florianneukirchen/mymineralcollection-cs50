@@ -11,7 +11,7 @@
     <h2>Tags</h2>
     <div class="container">
         {% for tag in rows %}
-        {{ tag['tags'] }},
+        {{ tag['tags'] | taglink | safe }},
         {% endfor %}
     </div>
                

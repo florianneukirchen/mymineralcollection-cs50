@@ -41,4 +41,4 @@ db.execute(sql)
 # tags table
 sql = "CREATE TABLE tags (specimen_id INTEGER NOT NULL REFERENCES specimen(id) ON DELETE CASCADE, tag TEXT NOT NULL)"
 db.execute(sql)
-db.execute("CREATE UNIQUE INDEX tagidx ON tags (tag)")
+db.execute("CREATE INDEX tagidx ON tags (tag)")

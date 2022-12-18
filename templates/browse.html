@@ -7,6 +7,9 @@
 {% block main %}
 
 <div class="container-fluid py-4 text-center">
+  {% if heading %}
+  <h1>{{ heading }}</h1>
+  {% endif %}
 
     <div class="card-group">
         {% for row in rows %}
