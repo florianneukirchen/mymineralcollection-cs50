@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Table 
+    {{ row['title'] }} 
 {% endblock %}
 
 {% block main %}
@@ -23,7 +23,11 @@
 
     <div>{{ row['locality'] }}</div>
     <div class="mb-3">Date: {{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</div>
-    <div class="mb-3">Tags...</div>
+    <div class="mb-3">
+        {% for tag in row['tags'] %}
+                    {{ tag['tag'] }},
+        {% endfor %}
+    </div>
     <div>{{ row['storage'] }}</div>
 
     <div class="mt-5">

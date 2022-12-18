@@ -64,7 +64,7 @@ def table():
 
     for row in rows:
         row['minerals'] = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", row['id'])
-        app.logger.info(row['minerals'])
+        row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
          
     
     return render_template("table.html", rows=rows)
@@ -166,7 +166,14 @@ def add():
             for min in minerals:
                 symbol = db.execute("SELECT symbol FROM minerals WHERE name = ?", min)[0]['symbol']
                 db.execute("INSERT INTO specmin (specimen_id, min_symbol) VALUES (?,?)", newid, symbol)
- 
+
+        # Add tags to DB
+        if tags:
+            tags = tags.split(',')
+            for tag in tags:
+                tag = tag.strip().replace('&', '').replace('<', '').replace('>', '')
+                db.execute ("INSERT INTO tags (specimen_id, tag) VALUES (?,?)", newid, tag)
+            
         return redirect("/table")
     else:
         # GET
@@ -216,9 +223,7 @@ def viewspecimen():
         return apology("Invalid specimen ID")
     row = rows[0]
     row['minerals'] = db.execute("SELECT minerals.name AS name, minerals.chemistry AS chemistry, minerals.crystal_system AS crystal_system FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", id)
-
-    for min in row['minerals']:
-        app.logger.info(min['chemistry'])
+    row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
 
     return render_template("view.html", row=row)
 
@@ -236,8 +241,30 @@ def deletespecimen():
             
     return redirect("/table")
 
+@app.route("/tag")
+def tag():
+    """View tags"""
+    t = request.args.get("t")
+   
+    if not t:
+        rows = db.execute("SELECT DISTINCT tags.tag AS tags FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.user_id = ?", session["user_id"])
+        return render_template("tagsall.html", rows=rows)
 
-# Experimental
+      
+    
+
+    if len(rows) != 1:
+        return apology("Invalid specimen ID")
+    row = rows[0]
+    row['minerals'] = db.execute("SELECT minerals.name AS name, minerals.chemistry AS chemistry, minerals.crystal_system AS crystal_system FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", id)
+    
+
+    return render_template("view.html", row=row)
+    
+
+
+
+# JSON API
 @app.route("/mineralsearch")
 def mineralsearch():
     q = request.args.get("q")

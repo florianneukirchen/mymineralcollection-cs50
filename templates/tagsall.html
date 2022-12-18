@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Tags
+{% endblock %}
+
+{% block main %}
+
+<div class="container-lg text-start">
+
+    <h2>Tags</h2>
+    <div class="container">
+        {% for tag in rows %}
+        {{ tag['tags'] }},
+        {% endfor %}
+    </div>
+               
+</div>
+
+
+{% endblock %}

@@ -73,7 +73,11 @@
                 </td>
                 <td class="text-start">{{ row['locality']  }}</td>
                 <td class="text-end">{{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</td>
-                <td class="text-start">Tags...</td>
+                <td class="text-start">
+                    {% for tag in row['tags'] %}
+                    {{ tag['tag'] }},
+                    {% endfor %}
+                </td>
                 <td class="text-start">{{ row['storage'] }}</td>
                 
                 <td>
