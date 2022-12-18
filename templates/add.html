@@ -7,10 +7,12 @@
 {% block main %}
 <h1>Add Specimen</h1>
 <div class="row">
+  
+
   <div class="col">
 
     <div class="container-lg">
-      <div class="form-group text-end">
+      <div class="form-group text-start">
         <form action="/add" method="post">
             
             <input autofocus class="form-control mb-2" id="number" name="number" placeholder="Number" type="text">
@@ -32,12 +34,13 @@
             <input class="form-control mb-2" id="tags" name="tags" placeholder="Tags (comma separated)" type="text">
             <input class="form-control mb-2" id="storage" name="storage" placeholder="Storage" type="text">
             <input type="hidden" id="hiddenminerals" name="minerals" value="">
-           
+            
             <button class="btn btn-primary mt-5" type="submit">Add</button>
         </form>
       </div>
     </div>
   </div>
+
 
   <div class="col">  
     <div class="container-md">
@@ -62,7 +65,11 @@
       
     </div>    
   </div>
+
+  
 </div>
+
+  
 {% endblock %}
 
 <!--
