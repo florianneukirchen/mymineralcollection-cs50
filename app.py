@@ -151,13 +151,17 @@ def add():
 
 
 
-        db.execute("INSERT INTO specimen (user_id, my_id, title, locality, day, month, year, storage, timestamp, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        newid = db.execute("INSERT INTO specimen (user_id, my_id, title, locality, day, month, year, storage, timestamp, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                        session["user_id"], number, title, locality, day, month, year, storage, datetime.now(), thumbnail)
 
-
+        if newid:
+            flash('New specimen has been added.')
+        else:
+            flash('Error, not able to add specimen.')
 
         return redirect("/table")
     else:
+        # GET
         return render_template("add.html")
 
 
