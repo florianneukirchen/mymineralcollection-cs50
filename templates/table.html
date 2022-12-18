@@ -59,14 +59,18 @@
             {% for row in rows %}
             <tr>
                 <td>
-                    <div>
+                    <div>{{ row['id'] }}
                         <input type="checkbox" class="form-check-input mycheckboxes" name="checkboxes" value="{{ row['id'] }}">
                     </div>
                 </td>
 
                 <td class="text-start">{{ row['my_id'] }}</td>
                 <td class="text-start">{{ row['title'] }}</td>
-                <td class="text-start">Minerals ...</td>
+                <td class="text-start">
+                    {% for min in row['minerals'] %}
+                    {{ min['name'] }},
+                    {% endfor %}
+                </td>
                 <td class="text-start">{{ row['locality']  }}</td>
                 <td class="text-end">{{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</td>
                 <td class="text-start">Tags...</td>

@@ -34,5 +34,7 @@ sql = "CREATE TABLE specimen (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, use
 db.execute(sql)
 
 # specmin table
-sql = "CREATE TABLE specmin (specimen_id INTEGER NOT NULL, min_symbol TEXT NOT NULL, FOREIGN KEY(specimen_id) REFERENCES specimen(id), FOREIGN KEY(min_symbol) REFERENCES mineral(symbol))"
+# Alt sql = "CREATE TABLE specmin (specimen_id INTEGER NOT NULL, min_symbol TEXT NOT NULL, FOREIGN KEY(specimen_id) REFERENCES specimen(id), FOREIGN KEY(min_symbol) REFERENCES minerals(symbol))"
+sql = "CREATE TABLE specmin (specimen_id INTEGER NOT NULL REFERENCES specimen(id) ON DELETE CASCADE, min_symbol TEXT NOT NULL, FOREIGN KEY(min_symbol) REFERENCES minerals(symbol))"
+
 db.execute(sql)

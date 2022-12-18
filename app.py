@@ -61,8 +61,12 @@ def table():
     """Show table of collection"""
     
     rows = db.execute("SELECT * FROM specimen WHERE user_id = ?", session["user_id"])
+
+    for row in rows:
+        row['minerals'] = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", row['id'])
+        app.logger.info(row['minerals'])
+         
     
-  
     return render_template("table.html", rows=rows)
 
 
