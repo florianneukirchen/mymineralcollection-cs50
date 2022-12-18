@@ -204,18 +204,22 @@ def register():
 
 @app.route("/view")
 @login_required
-def view():
+def viewspecimen():
     """View record"""
     id = request.args.get("id")
    
     if not id:
-        return apology("File does not exist", 404)
+        return redirect("/")
     rows = db.execute("SELECT * FROM specimen WHERE user_id = ? AND id = ?", session["user_id"], id)
 
     if len(rows) != 1:
         return apology("Invalid specimen ID")
     row = rows[0]
-          
+    row['minerals'] = db.execute("SELECT minerals.name AS name, minerals.chemistry AS chemistry, minerals.crystal_system AS crystal_system FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", id)
+
+    for min in row['minerals']:
+        app.logger.info(min['chemistry'])
+
     return render_template("view.html", row=row)
 
 
