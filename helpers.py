@@ -65,3 +65,15 @@ def addnr(value):
     if not value:
         return ""
     return 'Nr. ' + value
+
+def asimg(value):
+    """Return img html"""
+    if not value:
+        return ""
+    return '<img src="/uploads/' + value + '">'
+
+def asthumb(value):
+    """Return img html"""
+    if not value:
+        return ""
+    return '<img src="/thumb/' + value + '">'

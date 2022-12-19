@@ -11,7 +11,7 @@ from datetime import datetime
 import re
 from PIL import Image
 
-from helpers import apology, login_required, date2, date4, taglink, addnr, allowed_file, filenamehelper
+from helpers import *
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -28,7 +28,8 @@ app.jinja_env.filters["date2"] = date2
 app.jinja_env.filters["date4"] = date4
 app.jinja_env.filters["taglink"] = taglink
 app.jinja_env.filters["addnr"] = addnr
-
+app.jinja_env.filters["asimg"] = asimg
+app.jinja_env.filters["asthumb"] = asthumb
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -263,6 +264,7 @@ def viewspecimen():
     row = rows[0]
     row['minerals'] = db.execute("SELECT minerals.name AS name, minerals.chemistry AS chemistry, minerals.crystal_system AS crystal_system FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", id)
     row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+    row['images'] = db.execute("SELECT file FROM images JOIN specimen ON images.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
 
     return render_template("view.html", row=row)
 
