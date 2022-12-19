@@ -2,6 +2,8 @@ document.getElementById("uploadfile").innerHTML = '<input type="file" id="fileIn
 
 const fileInput = document.querySelector("#fileInput");
 const thumbholder = document.querySelector("#thumbholder");
+const hiddenimg = document.getElementById('hiddenimages');
+var imgarray = [];
 
 const uploadFile = file => {
   console.log("Uploading file...");
@@ -21,6 +23,10 @@ const uploadFile = file => {
         let thumbn = document.createElement('img');
         thumbn.src = "/thumb/" + request.responseText;
         thumbholder.appendChild(thumbn);
+
+        // Add filename to list
+        imgarray.push(request.responseText);
+        hiddenimg.value = imgarray.join();
       
     }
   };

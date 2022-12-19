@@ -159,6 +159,7 @@ def add():
         year = request.form.get("year")
         tags = request.form.get("tags")
         minerals = request.form.get("minerals")
+        images = request.form.get("hiddenimages")
      
         thumbnail = None
 
@@ -202,6 +203,16 @@ def add():
                 tag = re.sub('[^a-zA-Z0-9]', '', tag)
                 db.execute ("INSERT INTO tags (specimen_id, tag) VALUES (?,?)", newid, tag)
             
+        # Add images to DB
+        if images:
+            images = images.split(',')
+            for img in images:
+                # Check if file exists
+                if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), img)):
+                    db.execute ("INSERT INTO images (specimen_id, file) VALUES (?,?)", newid, img)
+                else:
+                    app.logger.info('file does not exists ' + img)
+        
         return redirect("/table")
     else:
         # GET
@@ -354,12 +365,10 @@ def upload_file():
 @app.route('/uploads/<name>')
 def download_img(name):
     foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
-    app.logger.info(foldername)
     return send_from_directory(foldername, name)
 
 @app.route('/thumb/<name>')
 def download_thumb(name):
-    app.logger.info(name)
     foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
     app.logger.info(foldername)
     return send_from_directory(foldername, name)

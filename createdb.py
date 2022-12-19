@@ -42,3 +42,7 @@ db.execute(sql)
 sql = "CREATE TABLE tags (specimen_id INTEGER NOT NULL REFERENCES specimen(id) ON DELETE CASCADE, tag TEXT NOT NULL)"
 db.execute(sql)
 db.execute("CREATE INDEX tagidx ON tags (tag)")
+
+# images table
+sql = "CREATE TABLE images (specimen_id INTEGER NOT NULL REFERENCES specimen(id) ON DELETE CASCADE, file TEXT NOT NULL)"
+db.execute(sql)
