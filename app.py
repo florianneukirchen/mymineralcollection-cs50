@@ -73,6 +73,9 @@ def index():
     for row in rows:
         row['minerals'] = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", row['id'])
         row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+        row['thumb'] = db.execute("SELECT file FROM images JOIN specimen ON images.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+        if len(row['thumb']) > 0:
+            row['thumb'] = row['thumb'][0]
    
     return render_template("browse.html", rows=rows)
 

@@ -35,6 +35,10 @@
                     {{ tag['tag'] | taglink | safe }},
                   {% endfor %}
 
+                  <div>
+                    {{ row['thumb']['file'] | asthumb | safe }}
+                  </div>  
+
                   <form action="/view" class="mt-1">
                     <input name="id" type="hidden" value="{{ row['id'] }}">
                     <input type="submit" value="View">

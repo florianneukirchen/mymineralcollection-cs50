@@ -31,11 +31,16 @@
     </div>
     <div>{{ row['storage'] }}</div>
 
-    <div>
+ 
+
+    
+
         {% for img in row['images'] %}
+          <div>
             {{ img['file'] | asimg | safe }}
-        {% endfor %}
-    </div>
+          </div>
+         {% endfor %}
+          
 
     <div class="mt-5">
     <form action="/delete" method="post">
