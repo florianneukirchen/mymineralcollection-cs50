@@ -1,0 +1,42 @@
+CREATE TABLE minerals (symbol TEXT, name TEXT NOT NULL, chemistry TEXT, elements TEXT, crystal_system TEXT, fleischer TEXT, PRIMARY KEY(symbol));
+CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, hash TEXT NOT NULL);
+CREATE TABLE sqlite_sequence(name,seq);
+CREATE UNIQUE INDEX username ON users (username);
+CREATE TABLE specimen (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, my_id TEXT, title TEXT, locality TEXT, day INTEGER, month INTEGER, year INTEGER, storage TEXT, timestamp TEXT, thumbnail TEXT);
+CREATE TABLE specmin (specimen_id INTEGER NOT NULL REFERENCES specimen(id) ON DELETE CASCADE, min_symbol TEXT NOT NULL, FOREIGN KEY(min_symbol) REFERENCES minerals(symbol));
+CREATE TABLE tags (specimen_id INTEGER NOT NULL REFERENCES specimen(id) ON DELETE CASCADE, tag TEXT NOT NULL);
+CREATE INDEX tagidx ON tags (tag);
+
+
+
+
+
+SELECT * FROM specimen JOIN specmin ON specmin.specimen_id = specimen.id JOIN minerals ON specmin.min_symbol = minerals.symbol  WHERE specimen.user_id = ? AND (name LIKE "%ata%" OR elements LIKE "%ata");
+
+
+
+
+
+sql = """SELECT * FROM specimen 
+                    JOIN specmin ON specmin.specimen_id = specimen.id 
+                    JOIN minerals ON specmin.min_symbol = minerals.symbol 
+                    LEFT OUTER JOIN tags ON tags.specimen_id = specimen.id 
+                    WHERE specimen.user_id = ? 
+                    AND (name LIKE ? 
+                    OR elements LIKE ?
+                    OR locality LIKE ?
+                    OR crystal_system LIKE ?
+                    OR year LIKE ?
+                    OR my_id LIKE ?
+                    OR tag LIKE ?)"""
+        rows = db.execute(sql, session["user_id"], q, q, q, q, q, q, q)
+        
+        
+        
+        
+        
+Funktioniert in sqlite3
+
+SELECT * FROM specimen JOIN specmin ON specmin.specimen_id = specimen.id JOIN minerals ON specmin.min_symbol = minerals.symbol LEFT OUTER JOIN tags ON tags.specimen_id = specimen.id WHERE specimen.user_id = 2 AND (name LIKE "%alb%" OR title LIKE "%alb%");
+
+        

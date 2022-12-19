@@ -46,6 +46,21 @@ def after_request(response):
 @login_required
 def index():
     """Browse Collection"""
+
+    # Are we searching?
+    q = request.args.get("search")
+    if q:
+        q = "%" + q + "%"
+        
+
+        sql = "SELECT * FROM specimen JOIN specmin ON specmin.specimen_id = specimen.id WHERE user_id = ? AND min_symbol = ?"
+        rows = db.execute(sql, session["user_id"], q)
+
+        app.logger.info("query " + q)
+        app.logger.info(str(rows))
+        return render_template("browse.html", rows=rows)
+        
+    # Normal behavoir        
     rows = db.execute("SELECT * FROM specimen WHERE user_id = ?", session["user_id"])
 
     for row in rows:
