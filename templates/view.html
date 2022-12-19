@@ -22,7 +22,9 @@
    
 
     <div>{{ row['locality'] }}</div>
+    {% if row['day'] or row['month'] or row['year'] %}
     <div class="mb-3">Date: {{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</div>
+    {% endif %}
     <div class="mb-3">
         {% for tag in row['tags'] %}
                     {{ tag['tag'] | taglink | safe }},

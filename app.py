@@ -51,8 +51,8 @@ def index():
     q = request.args.get("search")
     if q:
         q = "%" + q + "%"
+        # TODO: JOIN seems not to work with CS50 library
         
-
         sql = "SELECT * FROM specimen JOIN specmin ON specmin.specimen_id = specimen.id WHERE user_id = ? AND min_symbol = ?"
         rows = db.execute(sql, session["user_id"], q)
 
