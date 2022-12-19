@@ -5,6 +5,18 @@ const thumbholder = document.querySelector("#thumbholder");
 const hiddenimg = document.getElementById('hiddenimages');
 var imgarray = [];
 
+// Edit: show existing images
+if (hiddenimg.value) {
+    imgarray = hiddenimg.value.slice(0,-1).split(','); // slice: remove , from end
+    for (let img of imgarray){
+        let thumbn = document.createElement('img');
+        thumbn.src = "/thumb/" + img;
+        thumbholder.appendChild(thumbn);
+    }
+
+}
+// Upload
+
 const uploadFile = file => {
   console.log("Uploading file...");
   const API_ENDPOINT = "/upload";

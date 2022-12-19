@@ -13,11 +13,11 @@
 
     <div class="container-lg">
       <div class="form-group text-end">
-        <form action="/add" method="post">
+        <form action={% if id %}"/edit"{% else %}"add"{% endif %} method="post">
             
-            <input autofocus class="form-control mb-2" id="number" name="number" placeholder="Number" type="text" {% if id %}value="{{ row['my_id'] }}"{% endif %}>
-            <input class="form-control mb-2" id="title" name="title" placeholder="Title" type="text" {% if id %}value="{{ row['title'] }}"{% endif %} required>
-            <input class="form-control mb-2" id="locality" name="locality" placeholder="Locality" type="text" {% if id %}value="{{ row['locality'] }}"{% endif %}>
+            <input autofocus class="form-control mb-2" id="number" name="number" placeholder="Number" type="text" {% if id and row['my_id'] %}value="{{ row['my_id'] }}"{% endif %}>
+            <input class="form-control mb-2" id="title" name="title" placeholder="Title" type="text" {% if id and row['title'] %}value="{{ row['title'] }}"{% endif %} required>
+            <input class="form-control mb-2" id="locality" name="locality" placeholder="Locality" type="text" {% if id and row['locality'] %}value="{{ row['locality'] }}"{% endif %}>
             <div class="row mb-2">
               <div class="col text-start">Date:</div>
               <div class="col">
@@ -31,21 +31,18 @@
               </div>
               
             </div>
-            <input class="form-control mb-2" id="tags" name="tags" placeholder="Tags (comma separated)" type="text" {% if id %}value="{% for tag in row['tags'] %}{{ tag['tag'] }},{% endfor %}"{% endif %}>
-            <input class="form-control mb-2" id="storage" name="storage" placeholder="Storage" type="text" {% if id %}value="{{ row['title'] }}"{% endif %}>
-            <input type="hidden" id="hiddenminerals" name="minerals" {% if id %}value="{% for min in row['minerals'] %}{{ min['name'] }},{% endfor %}"{% endif %}>
-            <input type="hidden" id="hiddenimages" name="hiddenimages" {% if id %}value="{% for img in row['images'] %}{{ img['file'] }},{% endfor %}"{% endif %}>
+            <input class="form-control mb-2" id="tags" name="tags" placeholder="Tags (comma separated)" type="text" {% if id and row['tags'] %}value="{% for tag in row['tags'] %}{{ tag['tag'] }},{% endfor %}"{% endif %}>
+            <input class="form-control mb-2" id="storage" name="storage" placeholder="Storage" type="text" {% if id and row['storage'] %}value="{{ row['storage'] }}"{% endif %}>
+            <input type="hidden" id="hiddenminerals" name="minerals" {% if id and row['minerals'] %}value="{% for min in row['minerals'] %}{{ min['name'] }},{% endfor %}"{% endif %}>
+            <input type="hidden" id="hiddenimages" name="hiddenimages" {% if id and row['images'] %}value="{% for img in row['images'] %}{{ img['file'] }},{% endfor %}"{% endif %}>
             <input type="hidden" id="specimen_id" name="specimen_id" {% if id %}value="{{ id }}"{% endif %}>
             
-            <button class="btn btn-primary mt-5" type="submit">Add</button>
+            <button class="btn btn-primary mt-5" type="submit">{% if id %}Submit{% else %}Add{% endif %}</button>
         </form>
       </div>
     </div>
   </div>
 
-
-  
-                    
 
 
   <div class="col">  
@@ -72,7 +69,7 @@
       
     </div>  
     
-    <!-- Experimental -->
+
     <div class="container-md">
         <h3>Images</h3>
         <div class="mb-4" id="thumbholder"></div>
@@ -81,7 +78,7 @@
         </div>
         <script src="static/upload.js"></script> 
     </div>
-    <!-- End Experimental -->
+
 
 
   </div><!-- end col -->

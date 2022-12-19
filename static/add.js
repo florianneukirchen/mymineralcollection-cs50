@@ -19,6 +19,20 @@ input.addEventListener('input', async function() {
 
 var mineralsarray = [];
 
+// In edit mode we already have minerals
+if (hidden.value) {
+  mineralsarray = hidden.value.slice(0,-1).split(','); // slice: remove , from end
+  const ul = document.getElementById('ulminerals');
+  for (let value of mineralsarray){
+    const li = document.createElement('li');
+    li.innerHTML = value + '<button type=\"button\" onclick=\"removefromlist(id)\" class=\"btn btn-outline-secondary btn-sm float-end\" id=\"rem' + value + '\">Remove</button>';
+    li.className = "list-group-item";
+    ul.appendChild(li);
+  }
+
+}
+
+
 
 // function triggered by click event
 

@@ -95,7 +95,7 @@ def table():
     rows = db.execute("SELECT * FROM specimen WHERE user_id = ?", session["user_id"])
 
     for row in rows:
-        row['minerals'] = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", row['id'])
+        row['minerals'] = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ? ORDER BY name", row['id'])
         row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
          
     
@@ -197,8 +197,9 @@ def add():
         if minerals:
             minerals = minerals.split(',')
             for min in minerals:
-                symbol = db.execute("SELECT symbol FROM minerals WHERE name = ?", min)[0]['symbol']
-                db.execute("INSERT INTO specmin (specimen_id, min_symbol) VALUES (?,?)", newid, symbol)
+                if min:
+                    symbol = db.execute("SELECT symbol FROM minerals WHERE name = ?", min)[0]['symbol']
+                    db.execute("INSERT INTO specmin (specimen_id, min_symbol) VALUES (?,?)", newid, symbol)
 
         # Add tags to DB
         if tags:
@@ -206,7 +207,9 @@ def add():
             for tag in tags:
                 # Remove dangerous characters
                 tag = re.sub('[^a-zA-Z0-9]', '', tag)
-                db.execute ("INSERT INTO tags (specimen_id, tag) VALUES (?,?)", newid, tag)
+                # tag can be ''
+                if tag:
+                    db.execute ("INSERT INTO tags (specimen_id, tag) VALUES (?,?)", newid, tag)
             
         # Add images to DB
         if images:
@@ -238,9 +241,9 @@ def editsp():
         day = request.form.get("day")
         month = request.form.get("month")
         year = request.form.get("year")
-        tags = request.form.get("tags")
-        minerals = request.form.get("minerals")
-        images = request.form.get("hiddenimages")
+        tags = request.form.get("tags").strip(",")
+        minerals = request.form.get("minerals").strip(",")
+        images = request.form.get("hiddenimages").strip(",")
      
         thumbnail = None
 
@@ -265,36 +268,91 @@ def editsp():
         else:
             year = None
 
-        # Add Specimen to DB
-        db.execute("UPDATE specimen SET my_id = ?, title = ?, locality = ?, day = ?, month = ?, year = ?, storage = ?, thumbnail = ?) WHERE user_id = ? AND id = ?",
+        # Update Specimen 
+        db.execute("UPDATE specimen SET my_id = ?, title = ?, locality = ?, day = ?, month = ?, year = ?, storage = ?, thumbnail = ? WHERE user_id = ? AND id = ?",
                        number, title, locality, day, month, year, storage, thumbnail, session["user_id"], id)
 
-        """        
-        # Add minerals to DB
+      
+        # Update minerals
         if minerals:
             minerals = minerals.split(',')
-            for min in minerals:
+            minerals = set(minerals)
+            oldminerals = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", id)
+            oldminerals = [m['name'] for m in oldminerals]
+            app.logger.info(str(oldminerals))
+            oldminerals = set(oldminerals)
+            
+            for min in minerals.difference(oldminerals):
+                # That is items only present in minerals, not in oldminerals
                 symbol = db.execute("SELECT symbol FROM minerals WHERE name = ?", min)[0]['symbol']
-                db.execute("INSERT INTO specmin (specimen_id, min_symbol) VALUES (?,?)", newid, symbol)
+                db.execute("INSERT INTO specmin (specimen_id, min_symbol) VALUES (?,?)", id, symbol)
 
-        # Add tags to DB
+            for min in oldminerals.difference(minerals):
+                # That is items only present in oldminerals, not in minerals
+                symbol = db.execute("SELECT symbol FROM minerals WHERE name = ?", min)[0]['symbol']
+                db.execute("DELETE FROM specmin WHERE specimen_id = ? AND min_symbol = ?", id, symbol)
+
+        # Update Tags
         if tags:
             tags = tags.split(',')
             for tag in tags:
                 # Remove dangerous characters
                 tag = re.sub('[^a-zA-Z0-9]', '', tag)
-                db.execute ("INSERT INTO tags (specimen_id, tag) VALUES (?,?)", newid, tag)
+                
+            tags = set(tags)
+            oldtags = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", id)
+            oldtags = [t['tag'] for t in oldtags]
+            oldtags = set(oldtags)
+
+            for tag in tags.difference(oldtags):
+                # Only new tags
+                db.execute ("INSERT INTO tags (specimen_id, tag) VALUES (?,?)", id, tag)
+
+            for tag in oldtags.difference(tags):
+                # Tags to be removed
+                db.execute("DELETE FROM tags WHERE specimen_id = ? AND tag = ?", id, tag)
+                   
             
         # Add images to DB
         if images:
             images = images.split(',')
-            for img in images:
+            oldimages = db.execute("SELECT file FROM images JOIN specimen ON images.specimen_id = specimen.id WHERE specimen.id = ?", id)
+            oldimages = [img['file'] for img in oldimages]
+            images = set(images)
+            oldimages = set(oldimages)
+
+            for img in images.difference(oldimages):
+                # Only new images
                 # Check if file exists
                 if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), img)):
-                    db.execute ("INSERT INTO images (specimen_id, file) VALUES (?,?)", newid, img)
+                    db.execute ("INSERT INTO images (specimen_id, file) VALUES (?,?)", id, img)
                 else:
                     app.logger.info('file does not exists ' + img)
-        """     
+    
+            for img in oldimages.difference(images):
+                # Images to be deleted, first delete image files
+
+                foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
+                thumbfoldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
+
+                path = os.path.join(foldername, img)
+                app.logger.info(str(path))
+                if os.path.exists(path):
+                    app.logger.info("exists")
+                    try:
+                        os.remove(path)
+                    except:
+                        app.logger.info("Error: could not delete image file")
+                path = os.path.join(thumbfoldername, img)
+                if os.path.exists(path):
+                    try:
+                        os.remove(path)
+                    except:
+                        app.logger.info("Error: could not delete image file")
+
+                # delete records from DB
+                db.execute ("DELETE FROM images WHERE specimen_id = ? AND file = ?", id, img)
+
         return redirect("/table")
     else:
         # GET
