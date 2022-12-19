@@ -77,3 +77,9 @@ def asthumb(value):
     if not value:
         return ""
     return '<img src="/thumb/' + value + '">'
+
+def asthumbright(value):
+    """Return img html"""
+    if not value:
+        return ""
+    return '<img src="/thumb/' + value + '" class="thumbr">'

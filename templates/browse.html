@@ -20,6 +20,11 @@
             <div class="card">
                 <div class="card-body text-start size90">
                   <h5 class="card-title">{{ row['title'] }}</h5>
+                  
+                  <div>
+                    {{ row['thumb']['file'] | asthumbright | safe }}
+                  </div>
+
                   <div class="card-text mb-2">{{ row['my_id'] | addnr }}</div>
                   
                   {% for min in row['minerals'] %}
@@ -34,10 +39,7 @@
                   {% for tag in row['tags'] %}
                     {{ tag['tag'] | taglink | safe }},
                   {% endfor %}
-
-                  <div>
-                    {{ row['thumb']['file'] | asthumb | safe }}
-                  </div>  
+                  
 
                   <form action="/view" class="mt-1">
                     <input name="id" type="hidden" value="{{ row['id'] }}">

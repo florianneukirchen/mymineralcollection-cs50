@@ -30,6 +30,7 @@ app.jinja_env.filters["taglink"] = taglink
 app.jinja_env.filters["addnr"] = addnr
 app.jinja_env.filters["asimg"] = asimg
 app.jinja_env.filters["asthumb"] = asthumb
+app.jinja_env.filters["asthumbright"] = asthumbright
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -350,7 +351,7 @@ def upload_file():
             MAX_SIZE = (500, 500)
             img.thumbnail(MAX_SIZE)
             img.save(os.path.join(url, filename))
-            MAX_SIZE = (100, 100)
+            MAX_SIZE = (75, 75)
             img.thumbnail(MAX_SIZE)
             img.save(os.path.join(url, 'thumb', filename))
 
