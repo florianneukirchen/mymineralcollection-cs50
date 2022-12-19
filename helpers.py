@@ -33,6 +33,13 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def filenamehelper(url, filename):
+    if not os.path.exists(os.path.join(url, filename)):
+        return filename
+    filename = "a" + filename
+    return filenamehelper(url, filename)
+
+
 
 def date2(value):
     """Format value as 2 digits."""

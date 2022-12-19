@@ -2,7 +2,7 @@ import os
 import logging # usage: app.logger.info(x)
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, jsonify, url_for
+from flask import Flask, flash, redirect, render_template, request, session, jsonify, url_for, send_from_directory
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 import re
 
-from helpers import apology, login_required, date2, date4, taglink, addnr, allowed_file
+from helpers import apology, login_required, date2, date4, taglink, addnr, allowed_file, filenamehelper
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -315,14 +315,18 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            url = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'img')
+            url = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
             urlthumb = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
+            # Create directory for user if not exists
             if not os.path.exists(url):
                 os.makedirs(url)
             if not os.path.exists(urlthumb):
                 os.makedirs(urlthumb)
+            # Check if filename does exist
+            filename = filenamehelper(url, filename)
             file.save(os.path.join(url, filename))
-            return redirect(url_for('upload_file', name=filename))
+            return filename
+            # return redirect(url_for('download_img', name=filename))
     return '''
     <!doctype html>
     <title>Upload new File</title>
@@ -332,3 +336,11 @@ def upload_file():
       <input type=submit value=Upload>
     </form>
     '''
+
+
+@app.route('/uploads/<name>')
+def download_img(name):
+    app.logger.info(name)
+    foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
+    app.logger.info(foldername)
+    return send_from_directory(foldername, name)
