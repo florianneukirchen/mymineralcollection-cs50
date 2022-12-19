@@ -9,6 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import re
+from PIL import Image
 
 from helpers import apology, login_required, date2, date4, taglink, addnr, allowed_file, filenamehelper
 
@@ -317,14 +318,26 @@ def upload_file():
             filename = secure_filename(file.filename)
             url = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
             urlthumb = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
+            
             # Create directory for user if not exists
             if not os.path.exists(url):
                 os.makedirs(url)
             if not os.path.exists(urlthumb):
                 os.makedirs(urlthumb)
+            
             # Check if filename does exist
             filename = filenamehelper(url, filename)
             file.save(os.path.join(url, filename))
+
+            # Resize file and save small thumbnail
+            img = Image.open(os.path.join(url, filename))
+            MAX_SIZE = (500, 500)
+            img.thumbnail(MAX_SIZE)
+            img.save(os.path.join(url, filename))
+            MAX_SIZE = (100, 100)
+            img.thumbnail(MAX_SIZE)
+            img.save(os.path.join(url, 'thumb', filename))
+
             return filename
             # return redirect(url_for('download_img', name=filename))
     return '''
@@ -340,7 +353,13 @@ def upload_file():
 
 @app.route('/uploads/<name>')
 def download_img(name):
-    app.logger.info(name)
     foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
+    app.logger.info(foldername)
+    return send_from_directory(foldername, name)
+
+@app.route('/thumb/<name>')
+def download_thumb(name):
+    app.logger.info(name)
+    foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
     app.logger.info(foldername)
     return send_from_directory(foldername, name)
