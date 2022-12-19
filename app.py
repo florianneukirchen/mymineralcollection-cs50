@@ -2,17 +2,22 @@ import os
 import logging # usage: app.logger.info(x)
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, jsonify
+from flask import Flask, flash, redirect, render_template, request, session, jsonify, url_for
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 from datetime import datetime
 import re
 
-from helpers import apology, login_required, date2, date4, taglink, addnr
+from helpers import apology, login_required, date2, date4, taglink, addnr, allowed_file
+
+UPLOAD_FOLDER = 'uploads'
 
 # Configure application
 app = Flask(__name__)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -294,3 +299,36 @@ def mineralsearch():
     return jsonify(rows)
 
 
+# Upload, see https://flask.palletsprojects.com/en/2.2.x/patterns/fileuploads/
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            url = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'img')
+            urlthumb = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
+            if not os.path.exists(url):
+                os.makedirs(url)
+            if not os.path.exists(urlthumb):
+                os.makedirs(urlthumb)
+            file.save(os.path.join(url, filename))
+            return redirect(url_for('upload_file', name=filename))
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''

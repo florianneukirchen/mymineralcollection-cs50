@@ -25,6 +25,15 @@ def login_required(f):
     return decorated_function
 
 
+# https://flask.palletsprojects.com/en/2.2.x/patterns/fileuploads/
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 def date2(value):
     """Format value as 2 digits."""
     if not value:
