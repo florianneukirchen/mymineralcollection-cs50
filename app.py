@@ -11,7 +11,7 @@ from datetime import datetime
 import re
 from PIL import Image
 
-from helpers import apology, login_required, date2, date4, taglink, addnr, allowed_file, filenamehelper
+from helpers import *
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -28,7 +28,9 @@ app.jinja_env.filters["date2"] = date2
 app.jinja_env.filters["date4"] = date4
 app.jinja_env.filters["taglink"] = taglink
 app.jinja_env.filters["addnr"] = addnr
-
+app.jinja_env.filters["asimg"] = asimg
+app.jinja_env.filters["asthumb"] = asthumb
+app.jinja_env.filters["asthumbright"] = asthumbright
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -72,6 +74,9 @@ def index():
     for row in rows:
         row['minerals'] = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", row['id'])
         row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+        row['thumb'] = db.execute("SELECT file FROM images JOIN specimen ON images.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+        if len(row['thumb']) > 0:
+            row['thumb'] = row['thumb'][0]
    
     return render_template("browse.html", rows=rows)
 
@@ -159,6 +164,7 @@ def add():
         year = request.form.get("year")
         tags = request.form.get("tags")
         minerals = request.form.get("minerals")
+        images = request.form.get("hiddenimages")
      
         thumbnail = None
 
@@ -202,6 +208,16 @@ def add():
                 tag = re.sub('[^a-zA-Z0-9]', '', tag)
                 db.execute ("INSERT INTO tags (specimen_id, tag) VALUES (?,?)", newid, tag)
             
+        # Add images to DB
+        if images:
+            images = images.split(',')
+            for img in images:
+                # Check if file exists
+                if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), img)):
+                    db.execute ("INSERT INTO images (specimen_id, file) VALUES (?,?)", newid, img)
+                else:
+                    app.logger.info('file does not exists ' + img)
+        
         return redirect("/table")
     else:
         # GET
@@ -252,6 +268,7 @@ def viewspecimen():
     row = rows[0]
     row['minerals'] = db.execute("SELECT minerals.name AS name, minerals.chemistry AS chemistry, minerals.crystal_system AS crystal_system FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", id)
     row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+    row['images'] = db.execute("SELECT file FROM images JOIN specimen ON images.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
 
     return render_template("view.html", row=row)
 
@@ -334,7 +351,7 @@ def upload_file():
             MAX_SIZE = (500, 500)
             img.thumbnail(MAX_SIZE)
             img.save(os.path.join(url, filename))
-            MAX_SIZE = (100, 100)
+            MAX_SIZE = (75, 75)
             img.thumbnail(MAX_SIZE)
             img.save(os.path.join(url, 'thumb', filename))
 
@@ -354,12 +371,10 @@ def upload_file():
 @app.route('/uploads/<name>')
 def download_img(name):
     foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
-    app.logger.info(foldername)
     return send_from_directory(foldername, name)
 
 @app.route('/thumb/<name>')
 def download_thumb(name):
-    app.logger.info(name)
     foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
     app.logger.info(foldername)
     return send_from_directory(foldername, name)

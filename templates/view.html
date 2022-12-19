@@ -10,8 +10,7 @@
 
     <h2>{{ row['title'] }}</h2>
     <div class="h4">{{ row['my_id'] | addnr }}</div>
-
-    
+       
     {% for min in row['minerals'] %}
     <div class="mb-3">
         <div class="h5">{{ min['name'] }}</div>
@@ -31,6 +30,17 @@
         {% endfor %}
     </div>
     <div>{{ row['storage'] }}</div>
+
+ 
+
+    
+
+        {% for img in row['images'] %}
+          <div>
+            {{ img['file'] | asimg | safe }}
+          </div>
+         {% endfor %}
+          
 
     <div class="mt-5">
     <form action="/delete" method="post">

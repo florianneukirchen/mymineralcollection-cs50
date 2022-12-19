@@ -18,7 +18,7 @@ input.addEventListener('input', async function() {
 // Add to list
 
 var mineralsarray = [];
-var addBtns = document.querySelectorAll('.addBtn');
+
 
 // function triggered by click event
 
