@@ -277,6 +277,28 @@ def viewspecimen():
 def deletespecimen():
     id = request.form.get("id")
     if id:
+        # Make sure we also delete images
+        images = db.execute("SELECT file FROM images WHERE specimen_id = ?", id)
+        foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
+        thumbfoldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
+        app.logger.info(str(images))
+        for img in images:
+            path = os.path.join(foldername, img['file'])
+            app.logger.info(str(path))
+            if os.path.exists(path):
+                app.logger.info("exists")
+                try:
+                    os.remove(path)
+                except:
+                    app.logger.info("Error: could not delete image file")
+            path = os.path.join(thumbfoldername, img['file'])
+            if os.path.exists(path):
+                try:
+                    os.remove(path)
+                except:
+                    app.logger.info("Error: could not delete image file")
+
+        # Delete record in DB
         rows = db.execute("DELETE FROM specimen WHERE id = ? AND user_id = ?", id, session["user_id"])
 
         if rows < 1:
