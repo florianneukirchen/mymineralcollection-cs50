@@ -224,6 +224,101 @@ def add():
         return render_template("add.html")
 
 
+@app.route("/edit", methods=["GET", "POST"])
+@login_required
+def editsp():
+    """Edit Specimen."""
+
+    if request.method == "POST":
+        id = request.form.get("specimen_id")
+        title = request.form.get("title")
+        number = request.form.get("number")
+        locality = request.form.get("locality")
+        storage = request.form.get("storage")
+        day = request.form.get("day")
+        month = request.form.get("month")
+        year = request.form.get("year")
+        tags = request.form.get("tags")
+        minerals = request.form.get("minerals")
+        images = request.form.get("hiddenimages")
+     
+        thumbnail = None
+
+        # CHECK
+        try:
+            id = int(id)
+        except:
+            return apology("Invalid ID")
+
+        if not title:
+            return apology("Title is required")
+        if day in [str(i) for i in range(1, 32)]:
+            day = int(day)
+        else:
+            day = None
+        if month in [str(i) for i in range(1, 13)]:
+            month = int(month)
+        else:
+            month = None
+        if len(year) == 4 and year.isdigit():
+            year = int(year)
+        else:
+            year = None
+
+        # Add Specimen to DB
+        db.execute("UPDATE specimen SET my_id = ?, title = ?, locality = ?, day = ?, month = ?, year = ?, storage = ?, thumbnail = ?) WHERE user_id = ? AND id = ?",
+                       number, title, locality, day, month, year, storage, thumbnail, session["user_id"], id)
+
+        """        
+        # Add minerals to DB
+        if minerals:
+            minerals = minerals.split(',')
+            for min in minerals:
+                symbol = db.execute("SELECT symbol FROM minerals WHERE name = ?", min)[0]['symbol']
+                db.execute("INSERT INTO specmin (specimen_id, min_symbol) VALUES (?,?)", newid, symbol)
+
+        # Add tags to DB
+        if tags:
+            tags = tags.split(',')
+            for tag in tags:
+                # Remove dangerous characters
+                tag = re.sub('[^a-zA-Z0-9]', '', tag)
+                db.execute ("INSERT INTO tags (specimen_id, tag) VALUES (?,?)", newid, tag)
+            
+        # Add images to DB
+        if images:
+            images = images.split(',')
+            for img in images:
+                # Check if file exists
+                if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), img)):
+                    db.execute ("INSERT INTO images (specimen_id, file) VALUES (?,?)", newid, img)
+                else:
+                    app.logger.info('file does not exists ' + img)
+        """     
+        return redirect("/table")
+    else:
+        # GET
+        id = request.args.get("id")
+   
+        if not id:
+            return apology("No ID")
+
+        rows = db.execute("SELECT * FROM specimen WHERE user_id = ? AND id = ?", session["user_id"], id)
+
+        if len(rows) != 1:
+            return apology("Invalid specimen ID")
+        row = rows[0]
+        row['minerals'] = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", id)
+        row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+        row['images'] = db.execute("SELECT file FROM images JOIN specimen ON images.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+
+
+        return render_template("add.html", row=row, id=id)
+
+
+
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""

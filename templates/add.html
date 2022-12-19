@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-<h1>Add Specimen</h1>
+<h1>{% if id %}Edit{% else %}Add{% endif %} Specimen</h1>
 <div class="row">
   
 
@@ -15,32 +15,37 @@
       <div class="form-group text-end">
         <form action="/add" method="post">
             
-            <input autofocus class="form-control mb-2" id="number" name="number" placeholder="Number" type="text">
-            <input class="form-control mb-2" id="title" name="title" placeholder="Title" type="text" required>
-            <input class="form-control mb-2" id="locality" name="locality" placeholder="Locality" type="text">
+            <input autofocus class="form-control mb-2" id="number" name="number" placeholder="Number" type="text" {% if id %}value="{{ row['my_id'] }}"{% endif %}>
+            <input class="form-control mb-2" id="title" name="title" placeholder="Title" type="text" {% if id %}value="{{ row['title'] }}"{% endif %} required>
+            <input class="form-control mb-2" id="locality" name="locality" placeholder="Locality" type="text" {% if id %}value="{{ row['locality'] }}"{% endif %}>
             <div class="row mb-2">
               <div class="col text-start">Date:</div>
               <div class="col">
-                <input class="form-control" id="day" name="day" placeholder="Day" type="text">
+                <input class="form-control" id="day" name="day" placeholder="Day" type="text" {% if id and row['day'] %}value="{{ row['day'] }}"{% endif %}>
               </div>
               <div class="col">
-              <input class="form-control" id="month" name="month" placeholder="Month" type="text">
+              <input class="form-control" id="month" name="month" placeholder="Month" type="text" {% if id and row['month'] %}value="{{ row['month'] }}"{% endif %}>
               </div>
               <div class="col">
-              <input class="form-control" id="year" name="year" placeholder="Year" type="text">
+              <input class="form-control" id="year" name="year" placeholder="Year" type="text" {% if id and row['year'] %}value="{{ row['year'] }}"{% endif %}>
               </div>
               
             </div>
-            <input class="form-control mb-2" id="tags" name="tags" placeholder="Tags (comma separated)" type="text">
-            <input class="form-control mb-2" id="storage" name="storage" placeholder="Storage" type="text">
-            <input type="hidden" id="hiddenminerals" name="minerals" value="">
-            <input type="hidden" id="hiddenimages" name="hiddenimages" value="">
+            <input class="form-control mb-2" id="tags" name="tags" placeholder="Tags (comma separated)" type="text" {% if id %}value="{% for tag in row['tags'] %}{{ tag['tag'] }},{% endfor %}"{% endif %}>
+            <input class="form-control mb-2" id="storage" name="storage" placeholder="Storage" type="text" {% if id %}value="{{ row['title'] }}"{% endif %}>
+            <input type="hidden" id="hiddenminerals" name="minerals" {% if id %}value="{% for min in row['minerals'] %}{{ min['name'] }},{% endfor %}"{% endif %}>
+            <input type="hidden" id="hiddenimages" name="hiddenimages" {% if id %}value="{% for img in row['images'] %}{{ img['file'] }},{% endfor %}"{% endif %}>
+            <input type="hidden" id="specimen_id" name="specimen_id" {% if id %}value="{{ id }}"{% endif %}>
             
             <button class="btn btn-primary mt-5" type="submit">Add</button>
         </form>
       </div>
     </div>
   </div>
+
+
+  
+                    
 
 
   <div class="col">  

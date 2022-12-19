@@ -82,4 +82,4 @@ def asthumbright(value):
     """Return img html"""
     if not value:
         return ""
-    return '<img src="/thumb/' + value + '" class="thumbr">'
+    return '<img src="/thumb/' + value + '" class="floatright">'

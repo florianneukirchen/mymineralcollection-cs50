@@ -86,6 +86,12 @@
                         <input type="submit" value="View">
                     </form>
                 </td>
+                <td>
+                    <form action="/edit">
+                        <input name="id" type="hidden" value="{{ row['id'] }}">
+                        <input type="submit" value="Edit">
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
