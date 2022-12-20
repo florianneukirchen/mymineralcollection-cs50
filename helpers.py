@@ -64,7 +64,7 @@ def addnr(value):
     """Add Nr."""
     if not value:
         return ""
-    return 'Nr. ' + value
+    return '(Nr. ' + value + ')'
 
 def asimg(value):
     """Return img html"""

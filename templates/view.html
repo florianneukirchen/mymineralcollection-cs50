@@ -9,7 +9,7 @@
 <div class="container-lg text-start">
 
     <h2>{{ row['title'] }}</h2>
-    <div class="h4">{{ row['my_id'] | addnr }}</div>
+    <div class="h6">ID {{ row['id'] }} {{ row['my_id'] | addnr }}</div>
        
     {% for min in row['minerals'] %}
     <div class="mb-3">

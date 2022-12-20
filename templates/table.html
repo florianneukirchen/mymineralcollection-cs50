@@ -37,11 +37,12 @@
 
         </script>  
     </div>
-    
+
     <table class="table table-striped">
         <thead>
             <tr>
                 <th class="text-start">Select</th>
+                <th class="text-start">ID</th>
                 <th class="text-start">Number</th>
                 <th class="text-start">Title</th>
                 <th class="text-start">Minerals</th>
@@ -57,11 +58,11 @@
             {% for row in rows %}
             <tr>
                 <td>
-                    <div><!-- TODO -->{{ row['id'] }} / {{ row['user_id']}}
+                    
                         <input type="checkbox" class="form-check-input mycheckboxes" name="checkboxes" value="{{ row['id'] }}">
-                    </div>
+                   
                 </td>
-
+                <td class="text-start">{{ row['id'] }}</td>
                 <td class="text-start">{{ row['my_id'] }}</td>
                 <td class="text-start">{{ row['title'] }}</td>
                 <td class="text-start">

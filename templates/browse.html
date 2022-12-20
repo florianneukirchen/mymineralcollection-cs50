@@ -25,7 +25,7 @@
                     {{ row['thumb']['file'] | asthumbright | safe }}
                   </div>
 
-                  <div class="card-text mb-2">{{ row['my_id'] | addnr }}</div>
+                  <div class="card-text mb-2">ID {{ row['id'] }} {{ row['my_id'] | addnr }}</div>
                   
                   {% for min in row['minerals'] %}
                   <div class="card-text">{{ min['name'] }}</div>
