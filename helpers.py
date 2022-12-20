@@ -82,7 +82,7 @@ def asthumbright(value):
     """Return img html"""
     if not value:
         return ""
-    return '<img src="/thumb/' + value + '" class="floatright">'
+    return '<img src="/thumb/' + value + '" class="floatright rounded">'
 
 def shortnotes(value):
     n = 4
