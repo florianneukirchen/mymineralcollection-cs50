@@ -38,17 +38,17 @@
         </script>  
     </div>
 
-    <table class="table table-striped">
+    <table class="table table-striped" id="mytable">
         <thead>
             <tr>
                 <th class="text-start">Select</th>
-                <th class="text-start">ID</th>
-                <th class="text-start">Number</th>
-                <th class="text-start">Title</th>
-                <th class="text-start">Minerals</th>
-                <th class="text-start">Locality</th>
-                <th class="text-end">Date</th>
-                <th class="text-start">Tags</th>
+                <th class="text-start" onclick="sortTable(1)">ID</th>
+                <th class="text-start" onclick="sortTable(2)">Title</th>
+                <th class="text-start" onclick="sortTable(3)">Number</th>
+                <th class="text-start" onclick="sortTable(4)">Minerals</th>
+                <th class="text-start" onclick="sortTable(5)">Locality</th>
+                <th class="text-end" onclick="sortTable(6)">Date</th>
+                <th class="text-start" onclick="sortTable(7)">Tags</th>
                 <th class="text-start">Notes</th>
                 
             </tr>
@@ -63,8 +63,8 @@
                    
                 </td>
                 <td class="text-start">{{ row['id'] }}</td>
-                <td class="text-start">{{ row['my_id'] }}</td>
                 <td class="text-start">{{ row['title'] }}</td>
+                <td class="text-start">{{ row['my_id'] }}</td>
                 <td class="text-start">
                     {% for min in row['minerals'] %}
                     {{ min['name'] }},
@@ -96,6 +96,8 @@
         </tbody>
 
     </table>
+
+    <script src="static/sorttable.js"></script>
 </div>
 
 <!-- Bootstrap Modal -->
