@@ -509,10 +509,13 @@ def mineral():
     min = request.args.get("n")
    
     if not min:
-        # Show all tags
-        rows = db.execute("SELECT DISTINCT tags.tag AS tags FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.user_id = ?", session["user_id"])
-        return render_template("tagsall.html", rows=rows)
+        # Show mineral table
+        rows = db.execute("SELECT * FROM (SELECT * FROM SPECIMEN JOIN specmin ON specimen.id = specmin.specimen_id WHERE user_id = ?) a INNER JOIN minerals ON a.min_symbol = minerals.symbol ORDER BY minerals.name", session["user_id"])
+        for row in rows:
+            row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ? ORDER BY tag", row['id'])
+        return render_template("mintable.html", rows=rows)
 
+    # Else browse selected mineral
     rows = db.execute("SELECT * FROM specimen JOIN specmin ON specimen.id = specmin.specimen_id JOIN minerals ON minerals.symbol = specmin.min_symbol WHERE minerals.name LIKE ? AND specimen.user_id = ?", min, session["user_id"])      
 
     for row in rows:

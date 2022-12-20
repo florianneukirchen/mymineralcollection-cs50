@@ -16,12 +16,7 @@
         <!-- Delete Button triggers bootstrap dialogue (modal) -->
         <button type="button" class="btn btn-outline-danger" onclick="deleteselected()">Delete</button>
 
-        <script type="text/javascript">
-            //
-
-            
-
-        </script>  
+        
     </div>
 
     <table class="table table-striped" id="mytable">
@@ -57,7 +52,7 @@
                     {% endfor %}
                 </td>
                 <td class="text-start">{{ row['locality']  }}</td>
-                <td class="text-end">{{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</td>
+                <td class="text-end">{{ row['year'] | date4}}-{{ row['month'] | date2 }}-{{ row['day'] | date2 }}</td>
                 <td class="text-start">
                     {% for tag in row['tags'] %}
                     {{ tag['tag'] | taglink | safe }},
