@@ -11,6 +11,7 @@ if (hiddenimg.value) {
     for (let img of imgarray){
         let thumbn = document.createElement('img');
         thumbn.src = "/thumb/" + img;
+        thumbn.addEventListener('click', function(){ deleteimage(img) }) 
         thumbholder.appendChild(thumbn);
     }
 
@@ -55,3 +56,6 @@ fileInput.addEventListener("change", event => {
   uploadFile(files[0]);
 });
 
+function deleteimage(img) {
+  alert (img);
+}
