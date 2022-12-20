@@ -430,6 +430,12 @@ def viewspecimen():
 @app.route("/delete", methods=["POST"])
 def deletespecimen():
     id = request.form.get("id")
+    silent = request.form.get("silent")
+    if silent:
+        app.logger.info("silent")
+    else:
+        app.logger.info("not silent")
+
     if id:
         # Make sure we also delete images
         images = db.execute("SELECT file FROM images WHERE specimen_id = ?", id)
@@ -460,7 +466,13 @@ def deletespecimen():
         else:
             flash('Specimen has been deleted from database.')
             
-    return redirect("/table")
+    if silent:
+        return id
+    else:
+        return redirect("/table")
+
+
+
 
 @app.route("/tag")
 def tag():

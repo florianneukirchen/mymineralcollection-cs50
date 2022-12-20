@@ -14,24 +14,10 @@
         <button type="button" class="btn btn-outline-secondary" onclick="checkAll()">Select all</button>
         <button type="button" class="btn btn-outline-secondary" onclick="uncheckAll()">Clear</button>
         <!-- Delete Button triggers bootstrap dialogue (modal) -->
-        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal">
-        Delete
-        </button>
+        <button type="button" class="btn btn-outline-danger" onclick="deleteselected()">Delete</button>
 
         <script type="text/javascript">
-            function checkAll(){
-                let cbs = document.querySelectorAll('.mycheckboxes');
-                for (const cb of cbs){
-                    cb.checked = true;
-                }
-            }
-    
-            function uncheckAll(){
-                let cbs = document.querySelectorAll('.mycheckboxes');
-                for (const cb of cbs){
-                    cb.checked = false;
-                }
-            }
+            //
 
             
 
@@ -56,7 +42,7 @@
         <tbody>
             <!-- Loop through the database entries to display them in this table -->
             {% for row in rows %}
-            <tr>
+            <tr id="tr{{ row['id'] }}">
                 <td>
                     
                         <input type="checkbox" class="form-check-input mycheckboxes" name="checkboxes" value="{{ row['id'] }}">
@@ -97,7 +83,7 @@
 
     </table>
 
-    <script src="static/sorttable.js"></script>
+    <script src="static/tableaction.js"></script>
 </div>
 
 <!-- Bootstrap Modal -->
