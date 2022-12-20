@@ -35,17 +35,21 @@
                   {% if row['day'] or row['month'] or row['year'] %}
                   <div class="card-text text-muted">{{ row['day'] | date2 }}-{{ row['month'] | date2 }}-{{ row['year'] | date4}}</div>
                   {% endif %}
-
+                  <div class="card-text">
                   {% for tag in row['tags'] %}
                     {{ tag['tag'] | taglink | safe }},
                   {% endfor %}
+                  <div class="card-text">
+                    {{ row['notes'] | shortnotes }}
+                  </div>
+
                   
                   <div class="card-text mt-1">
                   <button type="button" class="btn btn-outline-secondary  btn-sm" mt-1 btn-sm" onclick="window.location.href='view?id={{ row['id'] }}';">View</button>
                   <button type="button" class="btn btn-outline-secondary  btn-sm" onclick="window.location.href='edit?id={{ row['id'] }}';">Edit</button>
                   </div>
+               
 
-                  </form>
                 </div>
               </div>
         </div>

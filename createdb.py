@@ -17,7 +17,7 @@ with open("minerals.csv", "r") as file:
 
     for row in reader:
         symbol = row['IMA Mineral Symbol']
-        name = row['Mineral Name (HTML)']
+        name = row['Mineral Name (plain)']
         chemistry = row['IMA Chemistry (HTML)']
         elements = row['Chemistry Elements']
         crystal_system = row['Crystal Systems']
@@ -30,7 +30,7 @@ db.execute(sql)
 db.execute("CREATE UNIQUE INDEX usernameidx ON users (username)")
 
 # Specimen table
-sql = "CREATE TABLE specimen (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, my_id TEXT, title TEXT, locality TEXT, day INTEGER, month INTEGER, year INTEGER, storage TEXT, timestamp TEXT, thumbnail TEXT)"
+sql = "CREATE TABLE specimen (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, my_id TEXT, title TEXT, locality TEXT, day INTEGER, month INTEGER, year INTEGER, notes TEXT, thumbnail TEXT)"
 db.execute(sql)
 db.execute("CREATE UNIQUE INDEX yearidx ON specimen (year)")
 

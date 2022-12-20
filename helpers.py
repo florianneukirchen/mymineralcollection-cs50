@@ -83,3 +83,13 @@ def asthumbright(value):
     if not value:
         return ""
     return '<img src="/thumb/' + value + '" class="floatright">'
+
+def shortnotes(value):
+    n = 4
+    result_list = value.split()
+    if len(result_list) < n:
+        return value
+    return " ".join(result_list[:n]) + "…"
+
+    
+    
