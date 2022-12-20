@@ -27,6 +27,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.jinja_env.filters["date2"] = date2
 app.jinja_env.filters["date4"] = date4
 app.jinja_env.filters["taglink"] = taglink
+app.jinja_env.filters["minlink"] = minlink
 app.jinja_env.filters["addnr"] = addnr
 app.jinja_env.filters["asimg"] = asimg
 app.jinja_env.filters["asthumb"] = asthumb
@@ -498,8 +499,33 @@ def tag():
         if len(row['thumb']) > 0:
             row['thumb'] = row['thumb'][0]
 
-    return render_template("browse.html", rows=rows, heading='Tag: '+ t)
+    heading = 'Tag: '+ t + ' (' + str(len(rows)) + ' specimen)'
+    return render_template("browse.html", rows=rows, heading=heading)
     
+
+@app.route("/mineral")
+def mineral():
+    """View minerals"""
+    min = request.args.get("n")
+   
+    if not min:
+        # Show all tags
+        rows = db.execute("SELECT DISTINCT tags.tag AS tags FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.user_id = ?", session["user_id"])
+        return render_template("tagsall.html", rows=rows)
+
+    rows = db.execute("SELECT * FROM specimen JOIN specmin ON specimen.id = specmin.specimen_id JOIN minerals ON minerals.symbol = specmin.min_symbol WHERE minerals.name LIKE ? AND specimen.user_id = ?", min, session["user_id"])      
+
+    for row in rows:
+        row['minerals'] = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ? ORDER BY name", row['id'])
+        row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ? ORDER BY tag", row['id'])
+        row['thumb'] = db.execute("SELECT file FROM images JOIN specimen ON images.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+        if len(row['thumb']) > 0:
+            row['thumb'] = row['thumb'][0]
+
+    heading = min + ' (' + str(len(rows)) + ' specimen)'
+    return render_template("browse.html", rows=rows, heading=heading)
+
+  
 
 # JSON API
 @app.route("/mineralsearch")

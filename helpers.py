@@ -60,6 +60,13 @@ def taglink(value):
     html = '<a href="tag?t=' + value + '">' + value + '</a>' 
     return html
 
+def minlink(value):
+    """Add links to mineral names."""
+    if not value:
+        return ""
+    html = '<a href="mineral?n=' + value + '" class="minlink">' + value + '</a>' 
+    return html
+
 def addnr(value):
     """Add Nr."""
     if not value:

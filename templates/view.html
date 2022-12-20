@@ -13,7 +13,7 @@
        
     {% for min in row['minerals'] %}
     <div class="mb-3">
-        <div class="h5">{{ min['name'] }}</div>
+        <div class="h5">{{ min['name'] | minlink | safe }}</div>
         <div class="size90">{{ min['chemistry'] | safe }}</div>
         <div class="text-muted size90">{{ min['crystal_system'] }}</div>
     </div>

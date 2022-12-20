@@ -53,7 +53,7 @@
                 <td class="text-start">{{ row['my_id'] }}</td>
                 <td class="text-start">
                     {% for min in row['minerals'] %}
-                    {{ min['name'] }},
+                    {{ min['name'] | minlink | safe }},
                     {% endfor %}
                 </td>
                 <td class="text-start">{{ row['locality']  }}</td>
