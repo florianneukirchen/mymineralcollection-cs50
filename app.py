@@ -493,54 +493,75 @@ def mineralsearch():
 
 
 # Upload, see https://flask.palletsprojects.com/en/2.2.x/patterns/fileuploads/
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/upload', methods=['POST'])
 def upload_file():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            url = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
-            urlthumb = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
-            
-            # Create directory for user if not exists
-            if not os.path.exists(url):
-                os.makedirs(url)
-            if not os.path.exists(urlthumb):
-                os.makedirs(urlthumb)
-            
-            # Check if filename does exist
-            filename = filenamehelper(url, filename)
-            file.save(os.path.join(url, filename))
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['file']
+    # If the user does not select a file, the browser submits an
+    # empty file without a filename.
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        url = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
+        urlthumb = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
+        
+        # Create directory for user if not exists
+        if not os.path.exists(url):
+            os.makedirs(url)
+        if not os.path.exists(urlthumb):
+            os.makedirs(urlthumb)
+        
+        # Check if filename does exist
+        filename = filenamehelper(url, filename)
+        file.save(os.path.join(url, filename))
 
-            # Resize file and save small thumbnail
-            img = Image.open(os.path.join(url, filename))
-            MAX_SIZE = (500, 500)
-            img.thumbnail(MAX_SIZE)
-            img.save(os.path.join(url, filename))
-            MAX_SIZE = (75, 75)
-            img.thumbnail(MAX_SIZE)
-            img.save(os.path.join(url, 'thumb', filename))
+        # Resize file and save small thumbnail
+        img = Image.open(os.path.join(url, filename))
+        MAX_SIZE = (500, 500)
+        img.thumbnail(MAX_SIZE)
+        img.save(os.path.join(url, filename))
+        MAX_SIZE = (75, 75)
+        img.thumbnail(MAX_SIZE)
+        img.save(os.path.join(url, 'thumb', filename))
 
-            return filename
-            # return redirect(url_for('download_img', name=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+        return filename
+        # return redirect(url_for('download_img', name=filename))
+    
+@app.route("/deleteimg", methods=["POST"])
+def deleteimg():
+    foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
+    thumbfoldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
+    img = request.form.get("img")
+    specimen_id = request.form.get("specimen_id")
+    app.logger.info(img)
+    if img:
+        # Delete files
+        path = os.path.join(foldername, img)
+        app.logger.info(str(path))
+        if os.path.exists(path):
+            try:
+                os.remove(path)
+            except:
+                app.logger.info("Error: could not delete image file")
+        path = os.path.join(thumbfoldername, img)
+        if os.path.exists(path):
+            try:
+                os.remove(path)
+            except:
+                app.logger.info("Error: could not delete image file")   
+          
+        # Delete from database if in edit mode
+        if specimen_id:
+            db.execute ("DELETE FROM images WHERE specimen_id = ? AND file = ?", specimen_id, img)
+           
+        return img 
+    return 
+
 
 
 @app.route('/uploads/<name>')
@@ -553,3 +574,4 @@ def download_thumb(name):
     foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
     app.logger.info(foldername)
     return send_from_directory(foldername, name)
+

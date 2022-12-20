@@ -2,6 +2,7 @@
 const input = document.getElementById('mininput');
 const hidden = document.getElementById('hiddenminerals');
 
+
 input.addEventListener('input', async function() {
     let response = await fetch('/mineralsearch?q=' + input.value);
     let searchresult = await response.json();
