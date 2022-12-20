@@ -35,6 +35,7 @@ const uploadFile = file => {
         // Show thumbnail
         let thumbn = document.createElement('img');
         thumbn.src = "/thumb/" + request.responseText;
+        thumbn.addEventListener('click', function(){ deleteimage(img) }) 
         thumbholder.appendChild(thumbn);
 
         // Add filename to list
