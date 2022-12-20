@@ -85,6 +85,12 @@ def asthumb(value):
         return ""
     return '<img src="/thumb/' + value + '">'
 
+def minithumb(value):
+    """Return img html"""
+    if not value:
+        return ""
+    return '<img src="/thumb/' + value + '" width="25px" height="25px">'
+
 def asthumbright(value):
     """Return img html"""
     if not value:

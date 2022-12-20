@@ -19,7 +19,7 @@
         
     </div>
 
-    <table class="table table-striped" id="mytable">
+    <table class="table table-striped size90 table-sm" id="mytable">
         <thead>
             <tr>
                 <th class="text-start">Select</th>
@@ -51,7 +51,7 @@
                     {{ min['name'] | minlink | safe }},
                     {% endfor %}
                 </td>
-                <td class="text-start">{{ row['locality']  }}</td>
+                <td class="text-start">{{ row['locality'] | shortnotes }}</td>
                 <td class="text-end">{{ row['year'] | date4}}-{{ row['month'] | date2 }}-{{ row['day'] | date2 }}</td>
                 <td class="text-start">
                     {% for tag in row['tags'] %}
@@ -59,6 +59,12 @@
                     {% endfor %}
                 </td>
                 <td class="text-start">{{ row['notes'] | shortnotes }}</td>
+
+                <td>
+                    {% for th in row['thumb'] %}
+                    {{ th['file'] | minithumb | safe }}
+                    {% endfor %}
+                </td>
                 
                 <td>
                     <form action="/view">
