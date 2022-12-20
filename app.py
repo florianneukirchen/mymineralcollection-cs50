@@ -31,6 +31,7 @@ app.jinja_env.filters["addnr"] = addnr
 app.jinja_env.filters["asimg"] = asimg
 app.jinja_env.filters["asthumb"] = asthumb
 app.jinja_env.filters["asthumbright"] = asthumbright
+app.jinja_env.filters["shortnotes"] = shortnotes
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -158,7 +159,7 @@ def add():
         title = request.form.get("title")
         number = request.form.get("number")
         locality = request.form.get("locality")
-        storage = request.form.get("storage")
+        notes = request.form.get("notes")
         day = request.form.get("day")
         month = request.form.get("month")
         year = request.form.get("year")
@@ -185,8 +186,8 @@ def add():
             year = None
 
         # Add Specimen to DB
-        newid = db.execute("INSERT INTO specimen (user_id, my_id, title, locality, day, month, year, storage, timestamp, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                       session["user_id"], number, title, locality, day, month, year, storage, datetime.now(), thumbnail)
+        newid = db.execute("INSERT INTO specimen (user_id, my_id, title, locality, day, month, year, notes, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                       session["user_id"], number, title, locality, day, month, year, notes, thumbnail)
 
         if newid:
             flash('New specimen has been added.')
@@ -237,7 +238,7 @@ def editsp():
         title = request.form.get("title")
         number = request.form.get("number")
         locality = request.form.get("locality")
-        storage = request.form.get("storage")
+        notes = request.form.get("notes")
         day = request.form.get("day")
         month = request.form.get("month")
         year = request.form.get("year")
@@ -269,8 +270,8 @@ def editsp():
             year = None
 
         # Update Specimen 
-        db.execute("UPDATE specimen SET my_id = ?, title = ?, locality = ?, day = ?, month = ?, year = ?, storage = ?, thumbnail = ? WHERE user_id = ? AND id = ?",
-                       number, title, locality, day, month, year, storage, thumbnail, session["user_id"], id)
+        db.execute("UPDATE specimen SET my_id = ?, title = ?, locality = ?, day = ?, month = ?, year = ?, notes = ?, thumbnail = ? WHERE user_id = ? AND id = ?",
+                       number, title, locality, day, month, year, notes, thumbnail, session["user_id"], id)
 
       
         # Update minerals
