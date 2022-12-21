@@ -12,7 +12,7 @@
   <div class="col">
 
     <div class="container-lg">
-      <div class="form-group text-start form-horizontal">
+      <div class="form-group text-end form-horizontal">
         <form action={% if id %}"/edit"{% else %}"add"{% endif %} method="post">  
             <input class="form-control mb-2" id="title" name="title" placeholder="Title" type="text" {% if id and row['title'] %}value="{{ row['title'] }}"{% endif %} required>
             <input autofocus class="form-control mb-2" id="number" name="number" placeholder="Number (optional)" type="text" {% if id and row['my_id'] %}value="{{ row['my_id'] }}"{% endif %}>

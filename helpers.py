@@ -4,6 +4,7 @@ import urllib.parse
 
 from flask import redirect, render_template, request, session
 from functools import wraps
+from PIL import Image
 
 
 def apology(message, code=400):
@@ -104,5 +105,17 @@ def shortnotes(value):
         return value
     return " ".join(result_list[:n]) + "…"
 
-    
+
+# Crop image to square    
+def crop_to_square(pil_img):
+    img_width, img_height = pil_img.size
+    crop_size = min(pil_img.size)
+    return pil_img.crop(((img_width - crop_size) // 2,
+                         (img_height - crop_size) // 2,
+                         (img_width + crop_size) // 2,
+                         (img_height + crop_size) // 2))
+
+
+
+
     

@@ -573,9 +573,12 @@ def upload_file():
         filename = filenamehelper(url, filename)
         file.save(os.path.join(url, filename))
 
-        # Resize file and save small thumbnail
+        # Resize file 
         img = Image.open(os.path.join(url, filename))
-        MAX_SIZE = (500, 500)
+        MAX_SIZE = (500, 400)
+
+        # Save thumbnail
+        img = crop_to_square(img)
         img.thumbnail(MAX_SIZE)
         img.save(os.path.join(url, filename))
         MAX_SIZE = (75, 75)
