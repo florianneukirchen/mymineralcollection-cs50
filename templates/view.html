@@ -86,10 +86,10 @@
  
     <div class="container-sm mt-5">
     <div class="row justify-content-center">
-        <div class="col-sm text-end">
+        <div class="col text-end">
             <button type="button" class="btn btn-outline-primary" onclick="window.location.href='edit?id={{ row['id'] }}';">Edit</button>
         </div>
-        <div class="col-sm text-start">
+        <div class="col text-start">
         <form action="/delete" method="post">
             <input name="id" type="hidden" value="{{ row.id }}">
             <input class="btn btn-outline-danger" type="submit" value="Delete">
