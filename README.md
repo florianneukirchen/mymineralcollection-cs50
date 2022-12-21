@@ -53,7 +53,7 @@ CREATE TABLE specimen (
     year INTEGER, 
     notes TEXT, 
     thumbnail TEXT);
-CREATE UNIQUE INDEX yearidx ON specimen (year);
+CREATE INDEX yearidx ON specimen (year);
 CREATE TABLE specmin (
     specimen_id INTEGER NOT NULL REFERENCES specimen(id) ON DELETE CASCADE, 
     min_symbol TEXT NOT NULL, FOREIGN KEY(min_symbol) REFERENCES minerals(symbol));
@@ -77,3 +77,4 @@ A one week project can't be perfect. Future work could include:
 - If several images were added to a specimen, allow to chose one as default thumbnail. 
 - Improve the layout of the edit/add sites.
 - Allow changing the sort order in the browser view (not only in the tables).
+- Allow changing password and to delete the user.

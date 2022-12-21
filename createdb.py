@@ -38,7 +38,7 @@ db.execute("CREATE UNIQUE INDEX usernameidx ON users (username)")
 # Specimen table
 sql = "CREATE TABLE specimen (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, my_id TEXT, title TEXT, locality TEXT, day INTEGER, month INTEGER, year INTEGER, notes TEXT, thumbnail TEXT)"
 db.execute(sql)
-db.execute("CREATE UNIQUE INDEX yearidx ON specimen (year)")
+db.execute("CREATE INDEX yearidx ON specimen (year)")
 
 # specmin table
 sql = "CREATE TABLE specmin (specimen_id INTEGER NOT NULL REFERENCES specimen(id) ON DELETE CASCADE, min_symbol TEXT NOT NULL, FOREIGN KEY(min_symbol) REFERENCES minerals(symbol))"

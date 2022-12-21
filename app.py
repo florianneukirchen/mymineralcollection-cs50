@@ -430,7 +430,7 @@ def register():
         # pass id returned by execute to session to log user in
         pwHash = generate_password_hash(request.form.get("password"))
         session["user_id"] = db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", request.form.get("username"), pwHash)
-        flash('Thanks for registering.')
+        flash('Thanks for registering. You can now add your first specimen.')
 
         return redirect("/")
     else:
