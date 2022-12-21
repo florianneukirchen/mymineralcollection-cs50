@@ -83,14 +83,20 @@ def index():
     q = request.args.get("search")
     if q:
         q = "%" + q + "%"
-        # TODO: JOIN seems not to work with CS50 library
-        
-        sql = "SELECT * FROM specimen JOIN specmin ON specmin.specimen_id = specimen.id WHERE user_id = ? AND min_symbol = ?"
-        rows = db.execute(sql, session["user_id"], q)
-
         app.logger.info("query " + q)
-        app.logger.info(str(rows))
-        return render_template("browse.html", rows=rows)
+
+        sql = "SELECT * FROM specimen WHERE user_id LIKE ? AND (title LIKE ?) OR (my_id LIKE ?) OR (locality LIKE ?) OR (notes LIKE ?) OR (id IN (SELECT specmin.specimen_id AS id FROM specmin JOIN minerals ON minerals.symbol = specmin.min_symbol WHERE name LIKE ?) AND user_id = ?)"
+        rows = db.execute(sql, session["user_id"], q, q, q, q, q, session["user_id"])
+
+        for row in rows:
+            row['minerals'] = db.execute("SELECT minerals.name AS name, minerals.chemistry AS chemistry FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ? ORDER BY name", row['id'])
+            row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ? ORDER BY tag", row['id'])
+            row['thumb'] = db.execute("SELECT file FROM images JOIN specimen ON images.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+            if len(row['thumb']) > 0:
+                row['thumb'] = row['thumb'][0]
+     
+        heading = 'Search: '+ q.strip('%') + ' (' + str(len(rows)) + ' specimen)'
+        return render_template("browse.html", rows=rows, heading=heading)
         
     # Normal behavoir        
     rows = db.execute("SELECT * FROM specimen WHERE user_id = ?", session["user_id"])
