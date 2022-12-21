@@ -7,20 +7,7 @@
 {% block main %}
 
 
-<!-- Delete worked yesterday, but now I get the following exception with multiple selected entries:
-
-DeprecationWarning: 'session_cookie_name' is deprecated and will be removed in Flask 2.3. Use 'SESSION_COOKIE_NAME' in 'app.config' instead.
-During handling of the above exception, another exception occurred:
-Traceback (most recent call last):
-  File "/home/XXXXX/miniconda3/envs/cs50/lib/python3.11/site-packages/flask/app.py", line 1844, in finalize_request
-    response = self.process_response(response)
-
-This happends when cs50 library tries to delete the second or third element from the database, although it worked for the first element(s). 
-This might be a problem of using the CS50 library?
-
-I am removing the feature for now. 
-
-
+<!-- 
 
 <div class="container-fluid">
     <div class="text-start card-smaller">
@@ -35,7 +22,7 @@ I am removing the feature for now.
     <table class="table table-striped size90 table-sm" id="mytable">
         <thead>
             <tr>
-                <th class="text-start" onclick="sortTable(0)">ID<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(0)" id="IDColumn">ID<img src="static/sort-solid.svg" width="10px" height="10px"></th>
                 <th class="text-start" onclick="sortTable(1)">Title<img src="static/sort-solid.svg" width="10px" height="10px"></th>
                 <th class="text-start" onclick="sortTable(2)">Number<img src="static/sort-solid.svg" width="10px" height="10px"></th>
                 <th class="text-start" onclick="sortTable(3)">Minerals<img src="static/sort-solid.svg" width="10px" height="10px"></th>
