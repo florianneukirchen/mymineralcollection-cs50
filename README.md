@@ -1,4 +1,4 @@
-# Mymineralcollection
+# Mymineralcollection (CS50 final project)
 Mymineralcollection is a webapp for mineral collectors using python, flask, and javascript. It is my final project of the [CS50 Introduction to Computer Science](https://www.edx.org/cs50) online course from Harvard / edx. My app allows registered users to manage, browse and search their mineral collection. It uses a database with (almost) all IMA approved minerals (data from from [https://rruff.info/ima/](https://rruff.info/ima/)) to automatically show chemistry, crystal system etc. 
 
 ## Requirements
