@@ -578,10 +578,10 @@ def upload_file():
         MAX_SIZE = (500, 400)
 
         # Save thumbnail
-        img = crop_to_square(img)
         img.thumbnail(MAX_SIZE)
         img.save(os.path.join(url, filename))
         MAX_SIZE = (75, 75)
+        img = crop_to_square(img)
         img.thumbnail(MAX_SIZE)
         img.save(os.path.join(url, 'thumb', filename))
 

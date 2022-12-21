@@ -39,7 +39,23 @@ background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/s
   text-decoration: underline;
 }
 
-#carouselExampleControls { max-width:500px;
+
+#carouselExampleControls { 
+  max-width:500px;
   max-height: 400px !important;
 }
 
+
+.mycarouselcont { 
+  max-width:500px;
+  max-height: 400px !important;
+}
+
+.carousel-inner img {
+  margin: auto;
+}
+
+#carouselcard{
+  height: 402px;
+  width: 500px;
+}

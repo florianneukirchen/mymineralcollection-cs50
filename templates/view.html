@@ -38,17 +38,23 @@
     </div>
     <div class="container-sm size90">{{ row['notes'] }}</div>
 
+
+
+{% if row['images'] | length > 1 %}
  <!-- Carousel -->
+ <div class="container-fluid">
+ <div class="row justify-content-center">
+    <div class="col">
 
-
- <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+ <div class="card border-light" id="carouselcard">
+ <div id="carouselExampleControls" class="carousel carousel-dark slide" data-bs-ride="carousel">
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img src="uploads/{{ row['images'][0]['file'] | safe }}" class="d-block w-100">
+            <img src="uploads/{{ row['images'][0]['file'] | safe }}" class="d-block mycarouselcont">
           </div>
         {% for img in row['images'][1:] %}
       <div class="carousel-item">
-        <img src="uploads/{{ img['file'] | safe }}" class="d-block w-100">
+        <img src="uploads/{{ img['file'] | safe }}" class="d-block mycarouselcont">
       </div>
        {% endfor %}
           </div>
@@ -61,8 +67,19 @@
       <span class="visually-hidden">Next</span>
     </button>
   </div>
+</div>
 
-  <!-- End Carousel -->
+</div>
+</div>
+</div>
+
+
+   <!-- End Carousel -->
+   
+{% elif row['images'] | length == 1 %}
+<div class="mb-3">{{ row['images'][0]['file'] | asimg | safe }}</div>
+{% endif %}
+ 
     
 
           
