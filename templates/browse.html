@@ -29,6 +29,7 @@
                   
                   {% for min in row['minerals'] %}
                   <div class="card-text">{{ min['name'] | minlink | safe }}</div>
+                  <div class="card-text text-muted">{{ min['chemistry'] | safe }}</div>
                   {% endfor %}
 
                   <div class="card-text">{{ row['locality'] }}</div>

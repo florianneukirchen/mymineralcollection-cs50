@@ -6,18 +6,25 @@
 
 {% block main %}
 
-<div class="container-lg ">
+<div class="container-fluid">
 
     <h2>{{ row['title'] }}</h2>
     <div class="h6">ID {{ row['id'] }} {{ row['my_id'] | addnr }}</div>
-       
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3 justify-content-center mb-3">   
     {% for min in row['minerals'] %}
-    <div class="mb-3">
-        <div class="h5">{{ min['name'] | minlink | safe }}</div>
-        <div class="size90">{{ min['chemistry'] | safe }}</div>
-        <div class="text-muted size90">{{ min['crystal_system'] }}</div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body text-start size90">
+              <h6 class="card-title">{{ min['name'] | minlink | safe }}</h6>
+              <div class="card-text mb-2">{{ min['chemistry'] | safe }}</div>
+              <div class="text-muted size90">Fleischers group: {{ min['fleischer'] }}</div>
+              <div class="text-muted size90">{{ min['crystal_system'] }}</div>
+            </div>
+        </div>
     </div>
     {% endfor %}
+    </div>
    
 
     <div>{{ row['locality'] }}</div>
@@ -29,7 +36,7 @@
                     {{ tag['tag'] | taglink | safe }},
         {% endfor %}
     </div>
-    <div>{{ row['notes'] }}</div>
+    <div class="size90">{{ row['notes'] }}</div>
 
  
 
