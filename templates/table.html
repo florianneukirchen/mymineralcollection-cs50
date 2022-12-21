@@ -22,14 +22,14 @@
     <table class="table table-striped size90 table-sm" id="mytable">
         <thead>
             <tr>
-                <th class="text-start">Select</th>
-                <th class="text-start" onclick="sortTable(1)">ID</th>
-                <th class="text-start" onclick="sortTable(2)">Title</th>
-                <th class="text-start" onclick="sortTable(3)">Number</th>
-                <th class="text-start" onclick="sortTable(4)">Minerals</th>
-                <th class="text-start" onclick="sortTable(5)">Locality</th>
-                <th class="text-end" onclick="sortTable(6)">Date</th>
-                <th class="text-start" onclick="sortTable(7)">Tags</th>
+                <th class="text-start"></th>
+                <th class="text-start" onclick="sortTable(1)">ID<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(2)">Title<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(3)">Number<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(4)">Minerals<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(5)">Locality<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(6)">Date<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(7)">Tags<img src="static/sort-solid.svg" width="10px" height="10px"></th>
                 <th class="text-start">Notes</th>
                 
             </tr>
@@ -52,7 +52,7 @@
                     {% endfor %}
                 </td>
                 <td class="text-start">{{ row['locality'] | shortnotes }}</td>
-                <td class="text-end">{{ row['year'] | date4}}-{{ row['month'] | date2 }}-{{ row['day'] | date2 }}</td>
+                <td class="text-start">{{ row['year'] | date4}}-{{ row['month'] | date2 }}-{{ row['day'] | date2 }}</td>
                 <td class="text-start">
                     {% for tag in row['tags'] %}
                     {{ tag['tag'] | taglink | safe }},
