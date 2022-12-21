@@ -42,9 +42,8 @@
 
 {% if row['images'] | length > 1 %}
  <!-- Carousel -->
- <div class="container-fluid">
- <div class="row justify-content-center">
-    <div class="col">
+
+<div class="container aligncenter mt-2">
 
  <div class="card border-light" id="carouselcard">
  <div id="carouselExampleControls" class="carousel carousel-dark slide" data-bs-ride="carousel">
@@ -70,14 +69,12 @@
 </div>
 
 </div>
-</div>
-</div>
 
 
    <!-- End Carousel -->
    
 {% elif row['images'] | length == 1 %}
-<div class="mb-3">{{ row['images'][0]['file'] | asimg | safe }}</div>
+<div class="mb-3 mt-2">{{ row['images'][0]['file'] | asimg | safe }}</div>
 {% endif %}
  
     
