@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Table 
+{% endblock %}
+
+{% block main %}
+
+
+
+
+<div class="container-fluid">
+    <h1>Minerals</h1>
+    <table class="table table-striped size90 table-sm" id="mytable">
+        <thead>
+            <tr>
+                <th class="text-start" onclick="sortTable(0)">Mineral<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(1)">Chemistry<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(2)">Crystal system<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(3)">Group<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" id="IDColumn" onclick="sortTable(4)">ID<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(5)">Title<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(6)">Number<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(7)">Locality<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-end" onclick="sortTable(8)">Date<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(9)">Tags<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start">Notes</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through the database entries to display them in this table -->
+            {% for row in rows %}
+            <tr id="tr{{ row['id'] }}">
+                <td class="text-start">{{ row['name'] | minlink | safe }}</td>
+                <td class="text-start">{{ row['chemistry'] | safe }}</td>
+                <td class="text-start">{{ row['crystal_system'] }}</td>
+                <td class="text-start">{{ row['fleischer'] }}</td>
+                <td class="text-start">{{ row['id'] }}</td>
+                <td class="text-start">{{ row['title'] }}</td>
+                <td class="text-start">{{ row['my_id'] }}</td>
+                <td class="text-start">{{ row['locality'] | shortnotes }}</td>
+                <td class="text-end">{{ row['year'] | date4}}-{{ row['month'] | date2 }}-{{ row['day'] | date2 }}</td>
+                <td class="text-start">
+                    {% for tag in row['tags'] %}
+                    {{ tag['tag'] | taglink | safe }},
+                    {% endfor %}
+                </td>
+                <td class="text-start">{{ row['notes'] | shortnotes }}</td>
+                
+                <td>
+                    <form action="/view">
+                        <input name="id" type="hidden" value="{{ row['id'] }}">
+                        <input type="submit" value="View">
+                    </form>
+                </td>
+                <td>
+                    <form action="/edit">
+                        <input name="id" type="hidden" value="{{ row['id'] }}">
+                        <input type="submit" value="Edit">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+    <script src="static/tableaction.js"></script>
+</div>
+
+  
+
+{% endblock %}

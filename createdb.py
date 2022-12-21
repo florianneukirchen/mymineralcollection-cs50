@@ -23,7 +23,13 @@ with open("minerals.csv", "r") as file:
         crystal_system = row['Crystal Systems']
         fleischer = row['Fleischers Groupname']
 
-        db.execute("INSERT INTO minerals (symbol, name, chemistry, elements, crystal_system, fleischer) VALUES (?, ?, ?, ?, ?, ?)", symbol, name, chemistry, elements, crystal_system, fleischer)
+        try:
+            db.execute("INSERT INTO minerals (symbol, name, chemistry, elements, crystal_system, fleischer) VALUES (?, ?, ?, ?, ?, ?)", symbol, name, chemistry, elements, crystal_system, fleischer)
+        except ValueError as e:
+            print(e)
+            print('with ', name, symbol)
+
+
 # User table
 sql = "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, hash TEXT NOT NULL)"
 db.execute(sql)
