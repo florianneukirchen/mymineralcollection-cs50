@@ -15,6 +15,25 @@ from helpers import *
 
 UPLOAD_FOLDER = 'uploads'
 
+
+"""
+Delete multiple specimen from table worked yesterday, but now I get the following exception with multiple selected entries:
+
+DeprecationWarning: 'session_cookie_name' is deprecated and will be removed in Flask 2.3. Use 'SESSION_COOKIE_NAME' in 'app.config' instead.
+During handling of the above exception, another exception occurred:
+Traceback (most recent call last):
+  File "/home/XXXXX/miniconda3/envs/cs50/lib/python3.11/site-packages/flask/app.py", line 1844, in finalize_request
+    response = self.process_response(response)
+
+This happends when cs50 library tries to delete the second or third element from the database, although it worked for the first element(s). 
+This might be a problem of using the CS50 library?
+
+I am removing the feature for now, I don't know how to fix it.
+
+"""
+
+
+
 # Configure application
 app = Flask(__name__)
 
@@ -434,19 +453,22 @@ def viewspecimen():
 
 @app.route("/delete", methods=["POST"])
 def deletespecimen():
+    user_id = str(session["user_id"])
+    app.logger.info("user:" + user_id)
     id = request.form.get("id")
     silent = request.form.get("silent")
     if silent:
-        app.logger.info("silent")
+        app.logger.info("silent:" + id)
     else:
-        app.logger.info("not silent")
+        app.logger.info("not silent" + id)
+
 
     if id:
         # Make sure we also delete images
         images = db.execute("SELECT file FROM images WHERE specimen_id = ?", id)
-        foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]))
-        thumbfoldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
-        app.logger.info(str(images))
+        foldername = os.path.join(app.config['UPLOAD_FOLDER'], user_id)
+        thumbfoldername = os.path.join(app.config['UPLOAD_FOLDER'], user_id, 'thumb')
+        app.logger.info("images " + str(images))
         for img in images:
             path = os.path.join(foldername, img['file'])
             app.logger.info(str(path))
@@ -464,18 +486,16 @@ def deletespecimen():
                     app.logger.info("Error: could not delete image file")
 
         # Delete record in DB
-        rows = db.execute("DELETE FROM specimen WHERE id = ? AND user_id = ?", id, session["user_id"])
+        app.logger.info("delete from DB " + id)
+        rows = db.execute("DELETE FROM specimen WHERE id = ? AND user_id = ?", id, user_id)
+        app.logger.info(id + " " + str(rows))
 
-        if rows < 1:
-            flash('Error, could not delete specimen from database.')
-        else:
-            flash('Specimen has been deleted from database.')
             
-    if silent:
-        return id
-    else:
-        return redirect("/table")
-
+        if silent:
+            return id
+        else:
+            return redirect("/table")
+    return redirect("/table")
 
 
 
