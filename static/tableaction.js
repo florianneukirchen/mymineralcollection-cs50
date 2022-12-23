@@ -13,6 +13,7 @@ function uncheckAll(){
 }
 
 function deleteselected(){
+  $('#exampleModal').modal('hide');
   let cbs = document.querySelectorAll('.mycheckboxes');
   const API_ENDPOINT = "/delete";
   let ids = [];

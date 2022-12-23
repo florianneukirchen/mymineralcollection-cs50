@@ -77,25 +77,43 @@
 <div class="mb-3 mt-2">{{ row['images'][0]['file'] | asimg | safe }}</div>
 {% endif %}
  
-    
-
-          
- 
-    <div class="container-sm mt-5">
+<div class="container-sm mt-5">
     <div class="row justify-content-center">
         <div class="col text-end">
             <button type="button" class="btn btn-outline-primary" onclick="window.location.href='edit?id={{ row['id'] }}';">Edit</button>
         </div>
         <div class="col text-start">
-        <form action="/delete" method="post">
-            <input name="id" type="hidden" value="{{ row.id }}">
-            <input class="btn btn-outline-danger" type="submit" value="Delete">
-        </form>
+          <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Delete
+          </button>
         </div>
     </div>
     </div>
                
 </div>
 
+
+<!-- Boostrap Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete specimen</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this specimen from the database?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <form action="/delete" method="post">
+          <input name="id" type="hidden" value="{{ row.id }}">
+          <input class="btn btn-danger" type="submit" value="Delete">
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End modal -->
 
 {% endblock %}
