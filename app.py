@@ -457,52 +457,53 @@ def viewspecimen():
     return render_template("view.html", row=row)
 
 
+def deletespecimen(id, user_id):
+    # Make sure we also delete images
+    images = db.execute("SELECT file FROM images WHERE specimen_id = ?", id)
+    foldername = os.path.join(app.config['UPLOAD_FOLDER'], user_id)
+    thumbfoldername = os.path.join(app.config['UPLOAD_FOLDER'], user_id, 'thumb')
+    app.logger.info("images " + str(images))
+    for img in images:
+        path = os.path.join(foldername, img['file'])
+        app.logger.info(str(path))
+        if os.path.exists(path):
+            app.logger.info("exists")
+            try:
+                os.remove(path)
+            except:
+                app.logger.info("Error: could not delete image file")
+        path = os.path.join(thumbfoldername, img['file'])
+        if os.path.exists(path):
+            try:
+                os.remove(path)
+            except:
+                app.logger.info("Error: could not delete image file")
+
+    # Delete record in DB
+    app.logger.info("delete from DB " + id)
+    rows = db.execute("DELETE FROM specimen WHERE id = ? AND user_id = ?", id, user_id)
+    app.logger.info(id + " " + str(rows))
+    return rows
+
+
+
+
 @app.route("/delete", methods=["POST"])
-def deletespecimen():
+def deletespec():
     user_id = str(session["user_id"])
     app.logger.info("user:" + user_id)
     id = request.form.get("id")
-    silent = request.form.get("silent")
-    if silent:
-        app.logger.info("silent:" + id)
-    else:
-        app.logger.info("not silent" + id)
-
-
+    ids = request.form.get("ids")
     if id:
-        # Make sure we also delete images
-        images = db.execute("SELECT file FROM images WHERE specimen_id = ?", id)
-        foldername = os.path.join(app.config['UPLOAD_FOLDER'], user_id)
-        thumbfoldername = os.path.join(app.config['UPLOAD_FOLDER'], user_id, 'thumb')
-        app.logger.info("images " + str(images))
-        for img in images:
-            path = os.path.join(foldername, img['file'])
-            app.logger.info(str(path))
-            if os.path.exists(path):
-                app.logger.info("exists")
-                try:
-                    os.remove(path)
-                except:
-                    app.logger.info("Error: could not delete image file")
-            path = os.path.join(thumbfoldername, img['file'])
-            if os.path.exists(path):
-                try:
-                    os.remove(path)
-                except:
-                    app.logger.info("Error: could not delete image file")
-
-        # Delete record in DB
-        app.logger.info("delete from DB " + id)
-        rows = db.execute("DELETE FROM specimen WHERE id = ? AND user_id = ?", id, user_id)
-        app.logger.info(id + " " + str(rows))
-
-            
-        if silent:
-            return id
-        else:
-            return redirect("/table")
-    return redirect("/table")
-
+        deletespecimen(id, user_id)
+        return redirect("/table")
+    elif ids:
+        ids = ids.strip(",").split(",")
+        for id in ids:
+            deletespecimen(id, user_id)
+        return ids
+    return 1
+    
 
 
 @app.route("/tag")

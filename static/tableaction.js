@@ -15,29 +15,32 @@ function uncheckAll(){
 function deleteselected(){
   let cbs = document.querySelectorAll('.mycheckboxes');
   const API_ENDPOINT = "/delete";
+  let ids = [];
   for (const cb of cbs){
       if (cb.checked) {
-        const request = new XMLHttpRequest();
-        const formData = new FormData();
-        let id = cb.value;
-        console.log("is checked " + id);
-        formData.append("id", id);
-        formData.append("silent", "silent");
-
-        request.open("POST", API_ENDPOINT, true);
-        request.onreadystatechange = () => {
-        if (request.readyState === 4 && request.status === 200) {
-          console.log(request.responseText);
-          const tablerow = document.getElementById('tr' + id);
-          const parent = tablerow.parentNode;
-          parent.removeChild(tablerow);
-          }
-        }
-  request.send(formData);
-
+        ids.push(cb.value);
       }
+    }
+    
+  const request = new XMLHttpRequest();
+  const formData = new FormData();
+  formData.append("ids", ids);
+
+  request.open("POST", API_ENDPOINT, true);
+  request.onreadystatechange = () => {
+  if (request.readyState === 4 && request.status === 200) {
+    console.log(request.responseText);
+    for (const id of ids){
+      const tablerow = document.getElementById('tr' + id);
+      const parent = tablerow.parentNode;
+      parent.removeChild(tablerow);
+    } 
+    
+    }
   }
-  uncheckAll();
+request.send(formData);
+
+uncheckAll();
 }
 
 

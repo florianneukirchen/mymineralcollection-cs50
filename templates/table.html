@@ -7,7 +7,7 @@
 {% block main %}
 
 
-<!-- 
+
 
 <div class="container-fluid">
     <div class="text-start card-smaller">
@@ -17,7 +17,7 @@
 
         
     </div>
--->
+
 
     <table class="table table-striped size90 table-sm" id="mytable">
         <thead>
@@ -37,13 +37,13 @@
             <!-- Loop through the database entries to display them in this table -->
             {% for row in rows %}
             <tr id="tr{{ row['id'] }}">
-                <!--
+                
                 <td>
                     
                         <input type="checkbox" class="form-check-input mycheckboxes" name="checkboxes" value="{{ row['id'] }}">
                    
                 </td>
-                -->
+                
                 <td class="text-start">{{ row['id'] }}</td>
                 <td class="text-start">{{ row['title'] }}</td>
                 <td class="text-start">{{ row['my_id'] }}</td>
