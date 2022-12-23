@@ -71,7 +71,6 @@ Note that the columns "thumbnail" is not used in the current version of Myminera
 ## Ideas for improvement
 A one week project can't be perfect. Future work could include:
 - Port DB handling from cs50 to sqlAlchemy. 
-- Allow deleting of multiple entries in the table view. I had this kind of working, but it often triggered an exception in flasks session management and even google couldn't give me any clues.
 - Allow to add/remove tags to/from several specimen with one click in the table view.
 - Print labels for selected specimen.
 - Optionally print these labels with QR codes of the URL of the specimen.
@@ -79,4 +78,4 @@ A one week project can't be perfect. Future work could include:
 - Improve the layout of the edit/add sites.
 - Allow changing the sort order in the browser view (not only in the tables).
 - Allow changing password and to delete the user.
-- Button to fill title input field with all mineral names
+

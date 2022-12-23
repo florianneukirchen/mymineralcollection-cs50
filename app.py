@@ -201,7 +201,11 @@ def add():
 
         # CHECK
         if not title:
-            return apology("Title is required")
+            if minerals:
+                title = minerals.strip(',').split(',')
+                title = " & ".join(title)
+            else:
+                return apology("Title or minerals are required")
         if day in [str(i) for i in range(1, 32)]:
             day = int(day)
         else:
@@ -285,7 +289,11 @@ def editsp():
             return apology("Invalid ID")
 
         if not title:
-            return apology("Title is required")
+            if minerals:
+                title = minerals.strip(',').split(',')
+                title = " & ".join(title)
+            else:
+                return apology("Title or minerals are required")
         if day in [str(i) for i in range(1, 32)]:
             day = int(day)
         else:
