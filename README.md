@@ -36,7 +36,7 @@ Also search results are shown in the browser. A search is performed on most data
 The login and register functionality and session management were taken from [CS50s finance problem set](https://cs50.harvard.edu/x/2022/psets/9/finance/).
 
 ## Youtube video
-(Youtube video)[https://www.youtube.com/watch?v=1QHAHcz1RTY]
+[Youtube video](https://www.youtube.com/watch?v=1QHAHcz1RTY)
 
 ## Requirements
 - cs50
