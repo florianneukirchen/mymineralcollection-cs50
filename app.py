@@ -83,7 +83,6 @@ def index():
     q = request.args.get("search")
     if q:
         q = "%" + q + "%"
-        app.logger.info("query " + q)
 
         sql = "SELECT * FROM specimen WHERE user_id LIKE ? AND (title LIKE ?) OR (my_id LIKE ?) OR (locality LIKE ?) OR (notes LIKE ?) OR (id IN (SELECT specmin.specimen_id AS id FROM specmin JOIN minerals ON minerals.symbol = specmin.min_symbol WHERE name LIKE ?) AND user_id = ?)"
         rows = db.execute(sql, session["user_id"], q, q, q, q, q, session["user_id"])
@@ -318,7 +317,6 @@ def editsp():
             minerals = set(minerals)
             oldminerals = db.execute("SELECT minerals.name AS name FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ?", id)
             oldminerals = [m['name'] for m in oldminerals]
-            app.logger.info(str(oldminerals))
             oldminerals = set(oldminerals)
             
             for min in minerals.difference(oldminerals):
@@ -375,9 +373,8 @@ def editsp():
                 thumbfoldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
 
                 path = os.path.join(foldername, img)
-                app.logger.info(str(path))
+
                 if os.path.exists(path):
-                    app.logger.info("exists")
                     try:
                         os.remove(path)
                     except:
@@ -458,9 +455,15 @@ def viewspecimen():
     if len(rows) != 1:
         return apology("Invalid specimen ID")
     row = rows[0]
-    row['minerals'] = db.execute("SELECT minerals.name AS name, minerals.chemistry AS chemistry, minerals.crystal_system AS crystal_system FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ? ORDER BY name", id)
+    row['minerals'] = db.execute("SELECT minerals.name AS name, minerals.chemistry AS chemistry, minerals.crystal_system AS crystal_system, minerals.fleischer AS fleischer FROM minerals JOIN specmin ON minerals.symbol = specmin.min_symbol WHERE specmin.specimen_id = ? ORDER BY name", id)
     row['tags'] = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ? ORDER BY tag", row['id'])
     row['images'] = db.execute("SELECT file FROM images JOIN specimen ON images.specimen_id = specimen.id WHERE specimen.id = ?", row['id'])
+
+    # Fleicher Group: if empty it has a unvisible Unicode character
+    for min in row['minerals']:
+        if min['fleischer'] == " ":
+            min['fleischer'] = " – "
+
 
     return render_template("view.html", row=row)
 
@@ -470,12 +473,9 @@ def deletespecimen(id, user_id):
     images = db.execute("SELECT file FROM images WHERE specimen_id = ?", id)
     foldername = os.path.join(app.config['UPLOAD_FOLDER'], user_id)
     thumbfoldername = os.path.join(app.config['UPLOAD_FOLDER'], user_id, 'thumb')
-    app.logger.info("images " + str(images))
     for img in images:
         path = os.path.join(foldername, img['file'])
-        app.logger.info(str(path))
         if os.path.exists(path):
-            app.logger.info("exists")
             try:
                 os.remove(path)
             except:
@@ -490,7 +490,6 @@ def deletespecimen(id, user_id):
     # Delete record in DB
     app.logger.info("delete from DB " + id)
     rows = db.execute("DELETE FROM specimen WHERE id = ? AND user_id = ?", id, user_id)
-    app.logger.info(id + " " + str(rows))
     return rows
 
 
@@ -499,7 +498,6 @@ def deletespecimen(id, user_id):
 @app.route("/delete", methods=["POST"])
 def deletespec():
     user_id = str(session["user_id"])
-    app.logger.info("user:" + user_id)
     id = request.form.get("id")
     ids = request.form.get("ids")
     if id:
@@ -629,11 +627,9 @@ def deleteimg():
     thumbfoldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
     img = request.form.get("img")
     specimen_id = request.form.get("specimen_id")
-    app.logger.info(img)
     if img:
         # Delete files
         path = os.path.join(foldername, img)
-        app.logger.info(str(path))
         if os.path.exists(path):
             try:
                 os.remove(path)
@@ -663,7 +659,6 @@ def download_img(name):
 @app.route('/thumb/<name>')
 def download_thumb(name):
     foldername = os.path.join(app.config['UPLOAD_FOLDER'], str(session["user_id"]), 'thumb')
-    app.logger.info(foldername)
     return send_from_directory(foldername, name)
 
 @app.route('/edittags', methods=["POST"])
@@ -687,23 +682,16 @@ def edittags():
         # Remove dangerous characters
         tag = re.sub('[^a-zA-Z0-9]', '', tag)
 
-    app.logger.info("ids " + str(ids))
-    app.logger.info("add " + str(addtags))
-    app.logger.info("rem " + str(removetags))
-
     for id in ids:
         # Test if specimen id and user id match
         test = db.execute("SELECT id FROM specimen WHERE id = ? AND user_id = ?", id, user_id)
         if len(test) == 1:
             # Remove tags
             for tag in removetags:
-                app.logger.info("rem " + str(tag))
                 db.execute ("DELETE FROM tags WHERE specimen_id = ? AND tag = ?", id, tag)
             # Add tags:
-            
             for tag in addtags:
                 if tag:
-                    app.logger.info("add " + str(tag))
                     # Test if it already exists
                     test2 = db.execute("SELECT tag FROM tags WHERE specimen_id = ? AND tag = ?", id, tag)
                     if len(test2) == 0:

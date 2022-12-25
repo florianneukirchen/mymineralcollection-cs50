@@ -18,7 +18,7 @@
             <div class="card-body text-start size90">
               <h6 class="card-title">{{ min['name'] | minlink | safe }}</h6>
               <div class="card-text mb-2">{{ min['chemistry'] | safe }}</div>
-              {% if min['fleischer'] %}<div class="text-muted size90">Fleischers group: {{ min['fleischer'] }}</div>{% endif %}
+              {% if min['fleischer'] != " – " %}<div class="text-muted size90">Fleischers group: {{ min['fleischer'] }}</div>{% endif %}
               <div class="text-muted size90">{{ min['crystal_system'] }}</div>
             </div>
         </div>
