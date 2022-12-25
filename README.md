@@ -28,12 +28,15 @@ The view of a specimen shows all avaible data and images. For all minerals, chem
 
 ![View specimen](./readme/view.gif)
 
-Clicking "Browse" shows the browser view with all specimen. Clicking on tags or mineral names anywhere in the app (browser, table, specimen view) shows the filtered specimen in the browser. 
+Clicking "Browse" shows the browser view with all specimen. Clicking on tags or mineral names anywhere in the app (browser, table, specimen view) shows the filtered specimen in the browser. The layout of cards is responsive to the window size and also works well on mobile phones.
 
 Also search results are shown in the browser. A search is performed on most database columns – unfortunately not on tags (in the current versions). 
 
 ### Login and Register
 The login and register functionality and session management were taken from [CS50s finance problem set](https://cs50.harvard.edu/x/2022/psets/9/finance/).
+
+## Youtube video
+(https://www.youtube.com/watch?v=1QHAHcz1RTY)[https://www.youtube.com/watch?v=1QHAHcz1RTY]
 
 ## Requirements
 - cs50
