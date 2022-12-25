@@ -44,7 +44,37 @@ request.send(formData);
 uncheckAll();
 }
 
+function edittags(){
+  $('#exampleModal').modal('hide');
+  let cbs = document.querySelectorAll('.mycheckboxes');
+  const addtags = document.getElementById('addtags');
+  const removetags = document.getElementById('removetags');
+  const API_ENDPOINT = "/edittags";
+  let ids = [];
+  for (const cb of cbs){
+      if (cb.checked) {
+        ids.push(cb.value);
+      }
+    }
+    
+  const request = new XMLHttpRequest();
+  const formData = new FormData();
+  formData.append("ids", ids);
+  formData.append("addtags", addtags.value);
+  formData.append("removetags", removetags.value);
 
+  request.open("POST", API_ENDPOINT, true);
+  request.onreadystatechange = () => {
+  if (request.readyState === 4 && request.status === 200) {
+    console.log(request.responseText);
+    location.reload();
+
+    
+    }
+  }
+request.send(formData);
+
+}
 
 
 
@@ -59,7 +89,7 @@ function deleteimage(img) {
   request.onreadystatechange = () => {
     if (request.readyState === 4 && request.status === 200) {
       console.log(request.responseText);
-      thumbn = document.getElementById(img);
+      const thumbn = document.getElementById(img);
       thumbholder.removeChild(thumbn);
       imgarray.filter(e => e != img);
       hiddenimg.value = imgarray.join();
@@ -67,6 +97,8 @@ function deleteimage(img) {
   }
   request.send(formData);
 }
+
+
 
 function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;

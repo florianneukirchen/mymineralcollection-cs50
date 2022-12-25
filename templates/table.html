@@ -13,11 +13,12 @@
     <div class="text-start card-smaller">
         <button type="button" class="btn btn-outline-secondary" onclick="checkAll()">Select all</button>
         <button type="button" class="btn btn-outline-secondary" onclick="uncheckAll()">Clear</button>
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tagModal">
+            Edit tags
+        </button>
         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Delete
         </button>
-        
-
         
     </div>
 
@@ -28,7 +29,7 @@
                 <th></th>
                 <th class="text-start" onclick="sortTable(1)" id="IDColumn">ID<img src="static/sort-solid.svg" width="10px" height="10px"></th>
                 <th class="text-start" onclick="sortTable(2)">Title<img src="static/sort-solid.svg" width="10px" height="10px"></th>
-                <th class="text-start" onclick="sortTable(3)">Number<img src="static/sort-solid.svg" width="10px" height="10px"></th>
+                <th class="text-start" onclick="sortTable(3)">No.<img src="static/sort-solid.svg" width="10px" height="10px"></th>
                 <th class="text-start" onclick="sortTable(4)">Minerals<img src="static/sort-solid.svg" width="10px" height="10px"></th>
                 <th class="text-start" onclick="sortTable(5)">Locality<img src="static/sort-solid.svg" width="10px" height="10px"></th>
                 <th class="text-start" onclick="sortTable(6)">Date<img src="static/sort-solid.svg" width="10px" height="10px"></th>
@@ -106,6 +107,29 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-danger" onclick="deleteselected()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End modal -->
+
+  <!-- Tags Boostrap Modal -->
+<div class="modal fade" id="tagModal" tabindex="-1" aria-labelledby="tagModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="tagModalLabel">Edit tags of selected specimen</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <label for="addtags">Add tags:</label>
+            <input class="form-control mb-2" id="addtags" name="addtags">
+            <label for="removetags">Remove tags:</label>
+            <input class="form-control mb-2" id="removetags" name="removetags">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="edittags()">Submit</button>
         </div>
       </div>
     </div>

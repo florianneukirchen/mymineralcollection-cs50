@@ -666,3 +666,65 @@ def download_thumb(name):
     app.logger.info(foldername)
     return send_from_directory(foldername, name)
 
+@app.route('/edittags', methods=["POST"])
+def edittags():
+    user_id = str(session["user_id"])
+    addtags = request.form.get("addtags").strip(",")
+    removetags = request.form.get("removetags").strip(",")
+    ids = request.form.get("ids").strip(",")
+    if not ids:
+        return 0
+    ids = ids.split(',')
+    addtags = addtags.split(',')
+    removetags = removetags.split(',')
+
+    for tag in addtags:
+        # Remove dangerous characters
+        tag = re.sub('[^a-zA-Z0-9]', '', tag)
+
+    
+    for tag in removetags:
+        # Remove dangerous characters
+        tag = re.sub('[^a-zA-Z0-9]', '', tag)
+
+    app.logger.info("ids " + str(ids))
+    app.logger.info("add " + str(addtags))
+    app.logger.info("rem " + str(removetags))
+
+    for id in ids:
+        # Test if specimen id and user id match
+        test = db.execute("SELECT id FROM specimen WHERE id = ? AND user_id = ?", id, user_id)
+        if len(test) == 1:
+            # Remove tags
+            for tag in removetags:
+                app.logger.info("rem " + str(tag))
+                db.execute ("DELETE FROM tags WHERE specimen_id = ? AND tag = ?", id, tag)
+            # Add tags:
+            
+            for tag in addtags:
+                if tag:
+                    app.logger.info("add " + str(tag))
+                    # Test if it already exists
+                    test2 = db.execute("SELECT tag FROM tags WHERE specimen_id = ? AND tag = ?", id, tag)
+                    if len(test2) == 0:
+                        db.execute("INSERT INTO tags (specimen_id, tag) VALUES (?, ?)", id, tag)
+    return ids
+
+    
+    
+    
+
+    
+
+
+
+    addtags = set(addtags)
+    oldtags = db.execute("SELECT tags.tag AS tag FROM tags JOIN specimen ON tags.specimen_id = specimen.id WHERE specimen.id = ?", id)
+    oldtags = [t['tag'] for t in oldtags]
+    oldtags = set(oldtags)
+
+    for tag in addtags.difference(oldtags):
+        # Only new tags
+        db.execute ("INSERT INTO tags (specimen_id, tag) VALUES (?,?)", id, tag)
+
+
