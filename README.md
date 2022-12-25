@@ -1,5 +1,8 @@
 # Mymineralcollection (CS50 final project)
-Mymineralcollection is a webapp for mineral collectors using python, flask, and javascript. It is my final project of the [CS50 Introduction to Computer Science](https://www.edx.org/cs50) online course from Harvard / edx. My app allows registered users to manage, browse and search their mineral collection. It uses a database with (almost) all IMA approved minerals (data from from [https://rruff.info/ima/](https://rruff.info/ima/)). Adding official mineral names to a specimen record is easy thanks to autocomplete (using AJAX). For all minerals, chemistry and crystal system etc. are automatically shown in specimen view and tables. One or several photos per specimen can be uploaded.
+Mymineralcollection is a webapp for mineral collectors using python, flask, and javascript. It is my final project of the [CS50 Introduction to Computer Science](https://www.edx.org/cs50) online course from Harvard / edx. 
+
+
+This app allows registered users to manage, browse and search their mineral collection. It uses a database with (almost) all IMA approved minerals (data from from [https://rruff.info/ima/](https://rruff.info/ima/)). Adding official mineral names to a specimen record is easy thanks to autocomplete (using AJAX). For all minerals, chemistry and crystal system etc. are automatically shown in specimen view and tables. One or several photos per specimen can be uploaded.
 
 
 ## Requirements
@@ -71,7 +74,6 @@ Note that the columns "thumbnail" is not used in the current version of Myminera
 ## Ideas for improvement
 A one week project can't be perfect. Future work could include:
 - Port DB handling from cs50 to sqlAlchemy. 
-- Allow to add/remove tags to/from several specimen with one click in the table view.
 - Print labels for selected specimen.
 - Optionally print these labels with QR codes of the URL of the specimen.
 - If several images were added to a specimen, allow to chose one as default thumbnail. 
