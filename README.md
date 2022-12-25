@@ -1,9 +1,39 @@
 # Mymineralcollection (CS50 final project)
-Mymineralcollection is a webapp for mineral collectors using python, flask, and javascript. It is my final project of the [CS50 Introduction to Computer Science](https://www.edx.org/cs50) online course from Harvard / edx. 
+Mymineralcollection is a webapp for mineral collectors using python, flask, sqlite and javascript. It is my final project of the [CS50 Introduction to Computer Science](https://www.edx.org/cs50) online course from Harvard / edx. 
 
 
-This app allows registered users to manage, browse and search their mineral collection. It uses a database with (almost) all IMA approved minerals (data from from [https://rruff.info/ima/](https://rruff.info/ima/)). Adding official mineral names to a specimen record is easy thanks to autocomplete (using AJAX). For all minerals, chemistry and crystal system etc. are automatically shown in specimen view and tables. One or several photos per specimen can be uploaded.
+This app allows registered users to manage, browse and search their mineral collection. It uses a database table with (almost) all IMA approved minerals (data from from [https://rruff.info/ima/](https://rruff.info/ima/)) to show chemistry, crystal system etc. of the minerals.
 
+## Usage
+
+### Add and edit specimen
+
+![Add mineral](./readme/add.gif)
+
+Adding [official mineral names](https://mineralogy-ima.org/Minlist.htm) to a specimen record is easy thanks to autocomplete (inspired by the [AJAX example](https://cs50.harvard.edu/x/2022/weeks/8/) of CS50). If the title field is left empty, a title is automatically generated with the selected minerals. One or several photos per specimen can be uploaded. The edit form is identical to the add form, but filled with data from the database. 
+
+### Tables
+
+![Edit Tags and delete specimen](./readme/edittags.gif)
+
+In the table view it is possible to bulk edit the tags of several selected specimen. It is also possible to delete several specimen in one go. By clicking on the table header on top of a certain column, the table can be sorted in ascending and descending order. 
+
+![Mineral table](./readme/mintable.png)
+
+Since one specimen can contain several minerals, sorting the specimen table by minerals is problematic. This is solved by a second table showing all minerals (specimen with n minerals are listed n times). Also chemistry, crystal system etc. are shown. 
+
+### Browse and view specimen
+
+The view of a specimen shows all avaible data and images. For all minerals, chemistry and crystal system etc. are automatically shown. If several images are present, they are shown in a slideshow. 
+
+![View specimen](./readme/view.gif)
+
+Clicking "Browse" shows the browser view with all specimen. Clicking on tags or mineral names anywhere in the app (browser, table, specimen view) shows the filtered specimen in the browser. 
+
+Also search results are shown in the browser. A search is performed on most database columns – unfortunately not on tags (in the current versions). 
+
+### Login and Register
+The login and register functionality and session management were taken from [CS50s finance problem set](https://cs50.harvard.edu/x/2022/psets/9/finance/).
 
 ## Requirements
 - cs50
@@ -16,6 +46,8 @@ This app allows registered users to manage, browse and search their mineral coll
 A clean database should be included in the repository.
 
 If the database mineralcollection.db does not exist, it can be created with the script `createdb.py`. A CSV file with mineral data is required that can be downloaded from [https://rruff.info/ima/](https://rruff.info/ima/). Be sure to include "Mineral Name (plain)", "Chrystal Systems", "IMA Chemistry (HTML)", "Chemical Elements", "Fleischers Groupname", "IMA Mineral Symbol" in your export options and save the file as minerals.csv. Note that some newly approved minerals that don't have a offical IMA symbol yet are skipped.
+
+The "uploads" folder must have access permission 777.
 
 ## Database scheme
 The database uses 6 tables:
@@ -69,15 +101,16 @@ CREATE TABLE images (
     file TEXT NOT NULL);
 ```
 
-Note that the columns "thumbnail" is not used in the current version of Mymineralcollection.
+Note that the column "thumbnail" is not used in the current version of Mymineralcollection.
 
 ## Ideas for improvement
 A one week project can't be perfect. Future work could include:
+- Search also on tags.
 - Port DB handling from cs50 to sqlAlchemy. 
 - Print labels for selected specimen.
 - Optionally print these labels with QR codes of the URL of the specimen.
 - If several images were added to a specimen, allow to chose one as default thumbnail. 
-- Improve the layout of the edit/add sites.
+- Improve the layout of the edit/add forms.
 - Allow changing the sort order in the browser view (not only in the tables).
 - Allow changing password and to delete the user.
 

@@ -84,7 +84,7 @@ def index():
     if q:
         q = "%" + q + "%"
 
-        sql = "SELECT * FROM specimen WHERE user_id LIKE ? AND (title LIKE ?) OR (my_id LIKE ?) OR (locality LIKE ?) OR (notes LIKE ?) OR (id IN (SELECT specmin.specimen_id AS id FROM specmin JOIN minerals ON minerals.symbol = specmin.min_symbol WHERE name LIKE ?) AND user_id = ?)"
+        sql = "SELECT * FROM specimen WHERE user_id LIKE ? AND ((title LIKE ?) OR (my_id LIKE ?) OR (locality LIKE ?) OR (notes LIKE ?) OR (id IN (SELECT specmin.specimen_id AS id FROM specmin JOIN minerals ON minerals.symbol = specmin.min_symbol WHERE name LIKE ?) AND user_id = ?))"
         rows = db.execute(sql, session["user_id"], q, q, q, q, q, session["user_id"])
 
         for row in rows:
