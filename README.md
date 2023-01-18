@@ -106,6 +106,9 @@ CREATE TABLE images (
 
 Note that the column "thumbnail" is not used in the current version of Mymineralcollection.
 
+## License
+The soure code can be used under the terms of the [BSD 3-clause license](https://github.com/florianneukirchen/mymineralcollection-cs50/blob/main/LICENSE). This license does not apply to the mineral data in the csv file / database.
+
 ## Ideas for improvement
 A one week project can't be perfect. Future work could include:
 - Search also on tags.
