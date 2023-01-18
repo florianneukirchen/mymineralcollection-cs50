@@ -119,4 +119,5 @@ A one week project can't be perfect. Future work could include:
 - Improve the layout of the edit/add forms.
 - Allow changing the sort order in the browser view (not only in the tables).
 - Allow changing password and to delete the user.
+- The mineral data offered by rruff has no license / copyright statement and it is not clear whether it can be redistributed. It would be good to use another source such as Wikipedia.
 
